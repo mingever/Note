@@ -382,7 +382,7 @@ boolean
 
   str 是引用类型，变量中保存的只是实际对象的地址。一般称这种变量为"引用"，引用指向实际对象，实际对象中保存着内容。
 
-  <img src="https://mingtypora.oss-cn-beijing.aliyuncs.com/java/variable1.png" style="zoom:50%;" />
+  <img src="https://oss.mingever.com/note/java/variable1.png" style="zoom:50%;" />
 
 - 赋值运算符（=）
 
@@ -394,7 +394,7 @@ boolean
 
 	对于引用类型 str，赋值运算符会改变引用中所保存的地址，原来的地址被覆盖掉，但是原来的对象不会被改变。如"hello"     字符串对象没有被改变。（没有被任何引用所指向的对象是垃圾，会被gc回收）
 
-	<img src="https://mingtypora.oss-cn-beijing.aliyuncs.com/java/variable2.png" style="zoom:50%;" />
+	<img src="https://oss.mingever.com/note/java/variable2.png" style="zoom:50%;" />
 
 
 
@@ -937,7 +937,7 @@ java中方法参数传递方式是按值传递。
 	实参num的值并不会被改变，在函数中修改的仅仅是形参，对实参的值的没有影响。
 	相当于是把实参num的值“5”，拷贝了一份传给了形参num，操作形参num的存储空间，并不会影响到实参num
 
-	<img src="http://mingtypora.oss-cn-beijing.aliyuncs.com/java/PassByValue1.png" style="zoom: 67%;" />
+	<img src="https://oss.mingever.com/note/java/PassByValue1.png" style="zoom: 67%;" />
 
 2. 例2
 
@@ -960,7 +960,7 @@ java中方法参数传递方式是按值传递。
 	传递的是实参test所引用的对象在堆内存中地址值的拷贝，传递给了形参test。
 	他们实际上是指向了堆内存中的同一个Test对象，因此change方法对形参test对象内容的修改也会体现到实参test上
 
-	<img src="http://mingtypora.oss-cn-beijing.aliyuncs.com/java/PassByValue2.png" style="zoom: 67%;" />
+	<img src="https://oss.mingever.com/note/java/PassByValue2.png" style="zoom: 67%;" />
 
 ​				
 
@@ -987,7 +987,7 @@ java中方法参数传递方式是按值传递。
 	change(Test test)方法中的 test = new Test()相当于修改了形参test的指向，使其指向了新的Test对象，但并不会影响到实参test的指向
 	此时实参test和形参test指向的并不是同一个对象，修改形参test对象的内容和实参test毫无关系
 	
-	<img src="http://mingtypora.oss-cn-beijing.aliyuncs.com/java/PassByValue3.png" style="zoom:67%;" />
+	<img src="https://oss.mingever.com/note/java/PassByValue3.png" style="zoom:67%;" />
 
 ​	
 
@@ -1441,9 +1441,9 @@ java方法参数的传递只有一种方式，基于值的传递，是变量值�
   	//即使子类中已经覆盖了属性a，但是方法的行为仍然和父类一致，输出的是父类的a的值。这说明父类成员变量并不是被覆盖了，而是被隐藏了
   	//如果子类想按照代码的逻辑实现功能的话就只能重写
   	```
-
+  	
   	demo1
-
+  	
   	``` java
   	class Father{
   	    int a = 10;
@@ -1463,9 +1463,9 @@ java方法参数的传递只有一种方式，基于值的传递，是变量值�
   	new Son().fun(); //输出 10 40， 
   	// 相当于在Son类的构造方法更改了Father类的属性b
   	```
-
+  	
   	demo2
-
+  	
   	``` java
   	class Father{
   	    int a = 10;

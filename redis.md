@@ -256,7 +256,7 @@ repl_backlog_histlen:126
 
 也就是说，如果采用这种模式，可以让故障自动修复，从而提升系统的可用性。在项目里，一般会配置多个主从模式集群，所以会引入多个哨兵节点。如下图所示
 
-<img src="https://mingtypora.oss-cn-beijing.aliyuncs.com/redis/redis-sentinel.png" style="zoom: 80%;" />
+<img src="https://oss.mingever.com/note/redis/redis-sentinel.png" style="zoom: 80%;" />
 
 ### 搭建哨兵模式集群
 
