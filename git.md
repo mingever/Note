@@ -1,6 +1,8 @@
 ## 配置
 
-1. 先配置账户
+### 公钥
+
+1. 配置账户
 
 	``` bash
 	git config --global user.name "ming"
@@ -21,7 +23,22 @@
 
 	known_hosts文件存储用户访问的主机的公钥。这是一个非常重要的文件，它通过将用户的身份保存到本地系统来确保用户连接到合法的服务器。这也有助于避免中间人攻击。
 
-## 在 PowerShell 中使用 Git
+
+
+### 链接远程仓库
+
+```shell
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin git@github.com:mingever/qingge_pure-design.git
+git push -u origin main
+```
+
+
+
+### 在 PowerShell 中使用 Git
 
 1. 设置脚本权限
 
@@ -47,13 +64,15 @@
 
 4. 因为上述命令生成的脚本会在每次打开新的 PowerShell 终端时执行，因此可以在此脚本最后加上 `clear` 来消除每次打开windows terminal都会出现的版本信息。上述产生的脚本位置为：Documents\WindowsPowerShell\profile.ps1
 
-## git 中文文件名乱码
+5. **中文文件名乱码**
 
-是因为git 默认中文文件名是 \xxx\xxx 等八进制形式
+	是因为git 默认中文文件名是 \xxx\xxx 等八进制形式
 
-``` bash
-git config --global core.quotepath false
-```
+	``` bash
+	git config --global core.quotepath false
+	```
+
+
 
 ## 分支
 
@@ -106,16 +125,7 @@ git config --global core.quotepath false
 
 5. 直接pull就是pull的dev的代码了，然后可以用push推送到dev分支
 
-## 链接远程仓库
 
-```shell
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin git@github.com:mingever/qingge_pure-design.git
-git push -u origin main
-```
 
 ## 问题
 
