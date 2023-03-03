@@ -1,3 +1,60 @@
+## 配置
+
+1. 先配置账户
+
+	``` bash
+	git config --global user.name "ming"
+	git config --global email.name "1697361914@qq.com"
+	```
+
+2. 生成ssh公钥
+
+	``` bash
+	ssh-keygen -t rsa -C "1697361914@qq.com"
+	#然后一直按，最终会在C:\Users\ming\.ssh里生成一对公私钥，公钥为id.rsa.pub，复制里面的内容到github即可
+	```
+
+3. known_hosts
+
+	当通过SSH连接到一个新的远程服务器时（如第一次clone时），系统会提示你是否要将远程主机添加到 known_hosts 文件
+	选择 yes，服务器的连接信息会保存在你的系统中。
+
+	known_hosts文件存储用户访问的主机的公钥。这是一个非常重要的文件，它通过将用户的身份保存到本地系统来确保用户连接到合法的服务器。这也有助于避免中间人攻击。
+
+## 在 PowerShell 中使用 Git
+
+1. 设置脚本权限
+
+	``` powershell
+	Set-ExecutionPolicy -Scope LocalMachine -ExecutionPolicy RemoteSigned -Force
+	```
+
+2. 使用包管理器安装posh-git
+
+	``` powershell
+	Install-Module posh-git -Scope CurrentUser -Force
+	```
+
+3. 更新 PowerShell 提示符
+
+	要在提示符中包含 Git 信息，那么需要 `Import-Module posh-git` 导入 Posh-Git 模块。
+	使用 `Add-PoshGitToProfile` 命令，来要让 PowerShell 在每次启动时都自动导入 Posh-Git，它会在你的 $profile 脚本中添加导入语句，此脚本会在每次打开新的 PowerShell 终端时执行。
+
+	``` powershell
+	Import-Module posh-git
+	Add-PoshGitToProfile -AllHosts
+	```
+
+4. 因为上述命令生成的脚本会在每次打开新的 PowerShell 终端时执行，因此可以在此脚本最后加上 `clear` 来消除每次打开windows terminal都会出现的版本信息。上述产生的脚本位置为：Documents\WindowsPowerShell\profile.ps1
+
+## git 中文文件名乱码
+
+是因为git 默认中文文件名是 \xxx\xxx 等八进制形式
+
+``` bash
+git config --global core.quotepath false
+```
+
 ## 分支
 
 远程仓库上有master和dev两个分支
