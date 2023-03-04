@@ -2,57 +2,53 @@
 
 1. 下载安装
 
-  https://nodejs.org/en/
+	https://nodejs.org/en/
 
-  http://nodejs.cn/download/
+	http://nodejs.cn/download/
 
 2. 全局配置
 
-  配置npm安装的全局模块所在的路径，以及缓存cache的路径，不然执行`npm install XXX -g` global全局安装时，会安装到C:\Users\用户名\AppData\Roaming\npm中
+	配置npm安装的全局模块所在的路径，以及缓存cache的路径，不然执行`npm install XXX -g` global全局安装时，会安装到C:\Users\用户名\AppData\Roaming\npm中
 
-  ``` bash
-  #在node.js安装文件夹下，创建node_global和node_cache文件夹，然后执行下面的
-  npm config set prefix "D:\install\nodejs\node_global"
-  npm config set cache "D:\install\nodejs\node_cache"
-  ```
+	``` bash
+	#在node.js安装文件夹下，创建node_global和node_cache文件夹，然后执行下面的
+	npm config set prefix "D:\install\nodejs\node_global"
+	npm config set cache "D:\install\nodejs\node_cache"
+	```
 
-  > ==配置完成后会在用户目录下生成.npmrc文件，不要删除==
+	> ==配置完成后会在用户目录下生成.npmrc文件，不要删除==
 
 3. 配置环境变量
 
-  将`D:\install\nodejs\node_global`和`D:\install\nodejs\node_global\node_modules` 添加到path中
+	将`D:\install\nodejs\node_global`和`D:\install\nodejs\node_global\node_modules` 添加到path中
 
 4. npm
 
-  node.js自带了软件安装包管理工具npm
+	node.js自带了软件安装包管理工具npm
 
-  ``` bash
-  #在管理员权限下
-  
-  #查看nodejs版本
-  node -v
-  #查看npm版本
-  npm -v
-  
-  #升级 npm
-  npm install -g npm
-  #使用淘宝的镜像及其命令cnpm
-  #升级或安装 cnpm
-  npm install cnpm -g
-  ```
+	``` bash
+	#在管理员权限下
+	
+	#查看nodejs版本
+	node -v
+	#查看npm版本
+	npm -v
+	
+	#升级 npm
+	npm install -g npm
+	#使用淘宝的镜像及其命令cnpm
+	#升级或安装 cnpm
+	npm install cnpm -g
+	
+	#查看全局已安装
+	npm ls -g
+	#查看当前项目已安装包（项目跟目录必须有 package.json 文件）
+	npm ls
+	#卸载全局包
+	npm uninstall 
+	```
 
-  一些命令
-
-  ``` bash
-  #查看全局已安装
-  npm ls -g
-  #查看当前项目已安装包（项目跟目录必须有 package.json 文件）
-  npm ls
-  #卸载全局包
-  npm uninstall -g
-  ```
-
-  
+	
 
 # vue3
 
