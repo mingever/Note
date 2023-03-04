@@ -115,6 +115,8 @@ SpringBoot 中默认的配置文件是resources 目录下的 application.propert
 
 ​	使用国内的地址：https://start.springboot.io
 
+> - [x] Spring Web
+
 第二种方式：使用 maven 向导创建项目，即自己加入SpringBoot依赖，修改目录结构，创建启动类
 
 
@@ -1005,6 +1007,44 @@ public class MyRestController {
     }
 }
 ```
+
+
+
+## Maven
+
+### 安装
+
+1. 下载
+
+	解压后放到目录即可
+
+	 http://maven.apache.org/download.html 
+
+2. 配置环境变量
+
+	将maven的bin 目录放到path中，如`D:\install\maven\apache-maven-3.9.0\bin`
+
+	通过`mvn -v`来测试
+
+3. 打开conf\settings.xml文件，配置本地仓库地址和阿里云远程仓库
+
+	``` xaml
+	<!--注意/不要写反-->
+	<localRepository>D:/install/maven/repositary</localRepository>
+	
+	<mirror>
+	  <id>alimaven</id>
+	  <name>aliyun maven</name>
+	  <url>
+	      http://maven.aliyun.com/nexus/content/groups/public/
+	  </url>
+	  <mirrorOf>central</mirrorOf>        
+	</mirror>
+	```
+
+4. 集成idea（一定要为其他项目设置，不然新建的项目还是idea默认maven）
+
+	![](https://oss.mingever.com/note/springBoot/maven_idea.png)
 
 
 
