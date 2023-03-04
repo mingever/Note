@@ -1,5 +1,7 @@
 # node.js
 
+
+
 1. 下载安装
 
 	https://nodejs.org/en/
@@ -48,7 +50,7 @@
 	npm uninstall 
 	```
 
-	
+  
 
 # vue3
 
