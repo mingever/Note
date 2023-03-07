@@ -33,11 +33,11 @@ win11只需要执行`wsl --install`，win10需要2004及以上版本来执行一
 	wsl --set-default-version 2
 	```
 
-	或者手动下载安装： https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi
+	[或者手动下载安装](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi)
 
 4. 安装Linux发行版
 
-	从Microsoft Store中选择并安装Ubuntu： https://www.microsoft.com/store/apps/9n6svws3rx71
+	[从Microsoft Store中选择并安装Ubuntu](https://www.microsoft.com/store/apps/9n6svws3rx71)
 
 5. 一些命令
 
@@ -46,7 +46,9 @@ win11只需要执行`wsl --install`，win10需要2004及以上版本来执行一
 	wsl --list --verbose
 	```
 
-  ### 用户设置
+  ### 设置
+
+**1）修改默认root登录**
 
 1. 为root设置密码
 
@@ -58,35 +60,76 @@ win11只需要执行`wsl --install`，win10需要2004及以上版本来执行一
 
 2. 修改为默认root登录
 
-	进入到`ubuntu2204.exe`的路径内 
-	C:\Program Files\WindowsApps\CanonicalGroupLimited.Ubuntu22.04LTS_2204.2.37.0_x64__79rhkp1fndgsc\ubuntu2204.exe 执行
+  进入到`ubuntu2204.exe`的路径内 
+  C:\Program Files\WindowsApps\CanonicalGroupLimited.Ubuntu22.04LTS_2204.2.37.0_x64__79rhkp1fndgsc\ubuntu2204.exe 执行
 
-	``` bash
-	ubuntu2204.exe config --default-user root
-	```
+  ``` bash
+  ubuntu2204.exe config --default-user root
+  ```
 
-	>WindowsApp因为是Windows商店UWP的目录，所以因为权限进不去，可以用powershell cd进去
+  >WindowsApp因为是Windows商店UWP的目录，所以因为权限进不去，可以用powershell cd进去
 
-3. 为root用户增加配色
+**2）为root用户增加配色**
 
-	``` bash
-	#查看所有用户
-	cat /etc/shadow
-	#删除用户
-	userdel ming
-	#如果想把用户的文件夹也删除，需要带上r参数
-	userdel -r ming
-	#增加用户
-	adduser ming
-	#root用户界面没有配色，需要把非root用户的配色文件复制到root的目录下
-	cp /home/ming/.bashrc /root/.bashrc
-	```
+``` bash
+#查看所有用户
+cat /etc/shadow
+#删除用户
+userdel ming
+#如果想把用户的文件夹也删除，需要带上r参数
+userdel -r ming
+#增加用户
+adduser ming
+#root用户界面没有配色，需要把非root用户的配色文件复制到root的目录下
+cp /home/ming/.bashrc /root/.bashrc
+```
 
-	
+**3）修改主机名**
+
+使用 `hostnamectl set-hostname --static "ming"` 修改主机名时，重启wsl会恢复默认
+需要在 `/etc/wsl.conf` 中修改
+
+``` bash
+#没有就创建一个wsl.conf
+vim /etc/wsl.conf
+
+#输入一下参数，注意[network]别漏打，hostname：设置当前 wsl 的主机名称；generateHosts：是否自动生成 hosts 文件
+[network]
+hostname = node01
+generateHosts = false
+#然后重启wsl --shutdown
+
+#也可以在此修改默认登陆用户，优先级高于ubuntu2204.exe config --default-user xxx 命令
+[user]
+default = root
+```
+
+
+
+### systemd
+
+微软宣布已与 Canonical 合作，将 systemd 引入 WSL
+
+[systemd入门教程](https://ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html)
+
+启用systemd
+
+``` bash
+echo -e "[boot]\nsystemd=true" | sudo tee -a /etc/wsl.conf
+```
+
+判断systemd是否启用成功
+
+``` bash
+ps --no-headers -o comm 1
+# 如果命令返回的是init说明systemd未启用，如果是systemd那么你的systemd已启用成功了。
+```
+
+
 
 ## 安装doker
 
-https://docs.docker.com/engine/install/ubuntu/
+[官网文档](https://docs.docker.com/engine/install/ubuntu/)
 
 **1）卸载旧版本**
 

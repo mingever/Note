@@ -1048,6 +1048,207 @@ public class MyRestController {
 
 
 
+## Lombok
+
+### 安装
+
+1. 依赖
+
+	``` xaml
+	<dependency>
+	    <groupId>org.projectlombok</groupId>
+	    <artifactId>lombok</artifactId>
+	    <optional>true</optional>
+	</dependency>
+	```
+
+2. 安装Lombok插件。
+
+3. 在File-settings-build-Annotation Processors里开启Enable annotation processing来让Lombok注解在编译阶段起到作用
+
+### 常用注解
+
+- **@Getter/@Setter**
+
+	作用类上，生成所有成员变量的getter/setter方法；作用于成员变量上，生成该成员变量的getter/setter方法。可以设定访问权限及是否懒加载等。
+
+- ToString：作用于类，覆盖默认的toString()方法，可以通过of属性限定显示某些字段，通过exclude属性排除某些字段。
+
+- @EqualsAndHashCode：作用于类，覆盖默认的equals和hashCode
+
+- **@NonNull**：主要作用于成员变量和参数中，标识不能为空，否则抛出空指针异常
+
+- @NoArgsConstructor, @RequiredArgsConstructor, @AllArgsConstructor
+
+	作用于类上，用于生成构造函数。有staticName、access等属性。
+	staticName属性一旦设定，将采用静态方法的方式生成实例，access属性可以限定访问权限。
+
+	- **@NoArgsConstructor**：生成无参构造器
+	- **@RequiredArgsConstructor**：生成包含final和@NonNull注解的成员变量的构造器
+	- **@AllArgsConstructor**：生成全参构造器
+
+- **@Data**：作用于类上，是以下注解的集合：@ToString @EqualsAndHashCode @Getter @Setter @RequiredArgsConstructor
+
+- @Builder：作用于类上，将类转变为建造者模式
+
+- @Log：作用于类上，生成日志变量。针对不同的日志实现产品，有不同的注解
+
+
+
+## MyBatis-Plus
+
+### 快速开始
+
+1. 依赖
+
+	``` xaml
+	<dependency>
+	    <groupId>com.baomidou</groupId>
+	    <artifactId>mybatis-plus-boot-starter</artifactId>
+	    <version>最新版本</version>
+	</dependency>
+	```
+
+2. 配置
+
+	- 配置 MapperScan 注解
+
+		``` java
+		@SpringBootApplication
+		@MapperScan("com.ming.dao")
+		```
+
+	- 或在yml中指定
+
+		``` yaml
+		#mybatis-plus设置
+		mybatis-plus:
+		  #mapper位置
+		  mapper-locations: classpath:mapper/*.xml
+		  #configuration:
+		    #sql日志打印
+		    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+		```
+
+### 注解
+
+``` java
+@TableName("sys_user")
+public class User {
+    @TableId(value = "user_id",type = IdType.AUTO)
+    private Long id;
+    @TableField("user_name")
+    private String name;
+    private Integer age;
+    private String email;
+}
+
+/*
+对于驼峰式命名的实体名和字段名，mybatis-plus默认处理是通过下划线分隔,比如
+SysUser实体名默认映射sys_user表；
+userName成员变量名默认映射是user_name字段；
+*/
+```
+
+- **@TableName**
+
+	表名注解，使用在实体类中，标识实体类对应的表。
+
+	默认情况下，如果数据库表是使用标准的下划线命名，并且能对应上实体类的类名，我们就不需要加上此注解去手动匹配，比如表名为==sys_user==，那么会自动匹配==SysUser==实体类
+
+	当数据库名与实体类名不一致或不符合驼峰命名时，需要在此注解用value指定表名
+
+- **@TableId**
+
+	主键注解，使用在实体类主键字段中
+
+	@TableId和@TableFieId同@TableName一样，如果数据库表里的字段名使用标准的下划线命名，并且能对应上实体类的成员名称(驼峰命名)我们就不需要特别去手动匹配，如字段名为==user_name==，那么就会自动匹配==userName==成员变量
+
+	当数据库字段名和实体类属性名不一致或不符合驼峰命名时，就需要用在此注解用==@TableId==或==@TableFieId==的==value==来指定表字段名
+
+	属性
+
+	- value：主键字段名
+	- type：指定主键类型，默认值IdType.NONE
+		-  AUTO：数据库 ID 自增
+		- NONE：无状态，该类型为未设置主键类型
+		- INPUT：insert 前自行 set 主键值
+		- ASSIGN_ID：分配 ID，主键类型为 Number(Long 和 Integer)或 String，雪花算法
+		- ASSIGN_UUID：分配 UUID,主键类型为 String
+
+- **TableFieId**：字段注解（非主键）。主要用来解决实体类的字段名与数据库中的字段名不匹配的问题
+
+### 接口
+
+mybatis-plus 提供两种包含预定义增删改查操作的接口：`BaseMapper`和`IService`
+
+Mybatis-plus提供了2个接口1个类：
+
+- **BaseMapper\<T>**：针对dao层的方法封装CRUD，需要指定对应的实体类
+- **IService\<T>** 针对业务逻辑层的封装，需要指定对应的实体类，是在BaseMapper基础上的加强
+- **ServiceImpl<M extends BaseMapper\<T>, T> implements IService**：针对业务逻辑层的实现，需要指定Dao层类和对应的实体类
+
+### 用法
+
+1. User实体类
+
+	``` java
+	@TableName("user")
+	@Data
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public class User {
+	    @TableId(value = "id",type = IdType.AUTO)
+	    private Integer id;
+	    private String loginName;
+	    private String userName;
+	    private String password;
+	    private String sex;
+	    private String email;
+	    private String address;
+	}
+	```
+
+2. UserDao接口
+
+	``` java
+	public interface UserDao extends BaseMapper<User> {}
+	
+	/*
+	Dao继承该接口后，无需编写mapper.xml文件，即可获得CRUD功能。
+	BaseMapper的泛型需要传入实体类，来与其绑定，生成代理对象，对其进行功能增强等（我猜的）
+	*/
+	```
+
+3. UserService接口
+
+	``` java
+	public interface UserService extends IService<User>{}
+	
+	/*
+	IService是对BaserMapper的增强，泛型需要传入实体类，来与其绑定
+	里面很多方法就是调用的BaserMapper的，只是改了个名字为了与BaserMapper的方法区分；有些方法是对BaserMapper的增强，另外还扩展了一些方法，如批量处理等。尽量用IService，BaserMapper有的它都有。
+	
+	service接口其实没必要继承IService，因为这里Userservice的实现类UserServiceImpl需要继承ServiceImpl。ServiceImpl里实现了IService，通过ServiceImpl就可以使用IService的默认方法，和其实现的IService的方法。
+	如果实现类不继承ServiceImpl，直接实现UserService接口的话，那么需要实现IService里的方法，显然这样不可以
+	
+	其实如果不考虑扩展的话，连service接口都不必要写
+	*/
+	```
+
+4. UserService实现类
+
+	``` java
+	@Service
+	public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserService{}
+	```
+
+	
+
+
+
+
+
 ## 注解
 
 ### 创建对象的
