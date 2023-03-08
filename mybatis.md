@@ -65,32 +65,34 @@ mybatis是一个sql映射框架，提供的数据库的操作能力。增强的J
 
 1. maven依赖
 
-	``` xaml
-	<!--mybatis依赖-->
-	<dependency>
-	  <groupId>org.mybatis</groupId>
-	  <artifactId>mybatis</artifactId>
-	  <version>3.5.1</version>
-	</dependency>
-	<!--mysql驱动-->
-	<dependency>
-	  <groupId>mysql</groupId>
-	  <artifactId>mysql-connector-java</artifactId>
-	  <version>8.0.16</version>
-	</dependency>
-	
-	<!--指定文件插件-->
-	<resources>
-	  <resource>
-	    <directory>src/main/java</directory><!--所在的目录-->
-	    <includes><!--包括目录下的.properties,.xml 文件都会扫描到-->
-	      <include>**/*.properties</include>
-	      <include>**/*.xml</include>
-	    </includes>
-	    <filtering>false</filtering>
-	  </resource>
-	</resources>
-	```
+  ``` xaml
+  <!--mybatis依赖-->
+  <dependency>
+    <groupId>org.mybatis</groupId>
+    <artifactId>mybatis</artifactId>
+    <version>3.5.1</version>
+  </dependency>
+  <!--mysql驱动-->
+  <dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.16</version>
+  </dependency>
+  
+  <!--指定文件插件-->
+  <build>
+      <resources>
+        <resource>
+          <directory>src/main/java</directory><!--所在的目录-->
+          <includes><!--包括目录下的.properties,.xml 文件都会扫描到-->
+            <include>**/*.properties</include>
+            <include>**/*.xml</include>
+          </includes>
+          <filtering>false</filtering>
+        </resource>
+      </resources>
+  </build>
+  ```
 
 2. 创建Dao接口：定义操作数据的方法
 

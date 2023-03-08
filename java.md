@@ -190,9 +190,26 @@ byte：==1字节==（8位）
 
 1. float
 
-	java中==小数直接量是double==，==表示float类型的直接量要加f或者F==，如``float f = 3.1f ``
+  java中==小数直接量是double==，==表示float类型的直接量要加f或者F==，如``float f = 3.1f ``
 
 2. double：8字节
+
+
+不要使用浮点型来进行运算，会有精度问题，要使用`BigDecimal`如
+
+``` java
+System.out.println(0.05+0.01);
+System.out.println(1.0-0.42);
+System.out.println(4.015*100);
+System.out.println(123.3/100);
+System.out.println(0.1*3);
+结果是
+0.060000000000000005
+0.5800000000000001
+401.49999999999994
+1.2329999999999999
+0.30000000000000004
+```
 
 **4）字符型**
 

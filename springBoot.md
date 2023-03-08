@@ -247,7 +247,7 @@ public class CommandLinerRunnerApplication implements CommandLineRunner {
 	例1：application.properties设置端口和上下文
 
 	``` properties
-	#设置端口号
+	#设置端口号，默认端口号：8080
 	server.port=8082
 	#设置访问应用上下文路径， contextpath
 	server.servlet.context-path=/myboot
@@ -576,105 +576,107 @@ server.servlet.encoding.force=true
 
 1. mybatis起步依赖：完成mybatis对象自动配置，对象放在容器中
 
-  ``` xaml
-  <dependency>
-   <groupId>org.springframework.boot</groupId>
-   <artifactId>spring-boot-starter-web</artifactId>
-   </dependency>
-  
-   <!--mybatis 起步依赖： mybatis 框架需要的依赖全部加入好-->
-   <dependency>
-   <groupId>org.mybatis.spring.boot</groupId>
-   <artifactId>mybatis-spring-boot-starter</artifactId>
-   <version>2.1.4</version>
-   </dependency>
-  
-   <!--mysql 驱动-->
-   <dependency>
-   <groupId>mysql</groupId>
-   <artifactId>mysql-connector-java</artifactId>
-   <scope>runtime</scope>
-   </dependency>
-  ```
+	```xaml
+	<dependency>
+	 <groupId>org.springframework.boot</groupId>
+	 <artifactId>spring-boot-starter-web</artifactId>
+	 </dependency>
+	
+	 <!--mybatis 起步依赖： mybatis 框架需要的依赖全部加入好-->
+	 <dependency>
+	 <groupId>org.mybatis.spring.boot</groupId>
+	 <artifactId>mybatis-spring-boot-starter</artifactId>
+	 <version>2.1.4</version>
+	 </dependency>
+	
+	 <!--mysql 驱动-->
+	 <dependency>
+	 <groupId>mysql</groupId>
+	 <artifactId>mysql-connector-java</artifactId>
+	 <scope>runtime</scope>
+	 </dependency>
+	```
 
-2. pom.xml 指定把src/main/java目录中的xml文件包含到classpath中
+2. pom.xml 指定把src/main/resources目录中的xml文件包含到classpath中
 
-  ``` xaml
-  <resources>
-      <resource>
-          <directory>src/main/resources</directory>
-          <includes>
-              <include>**/*.*</include>
-          </includes>
-      </resource>
-  </resources>
-  ```
+	```xaml
+	<resources>
+	    <resource>
+	        <directory>src/main/resources</directory>
+	        <includes>
+	            <include>**/*.*</include>
+	        </includes>
+	    </resource>
+	</resources>
+	```
+
+	> 发现不指定这个，resources包里的文件依然可以编译到classes中
 
 3. 创建实体类Student
 
 4. 创建Dao接口StudentDao , 创建一个查询学生的方法
 
-  ``` java
-  //@Mapper：告诉mybatis这是dao接口，会创建此接口的代理对象
-  public interface StudentDao {
-      Student selectById(@Param("stuId") Integer id);
-  }
-  ```
+	```java
+	//@Mapper：告诉mybatis这是dao接口，会创建此接口的代理对象
+	public interface StudentDao {
+	    Student selectById(@Param("stuId") Integer id);
+	}
+	```
 
-5. 创建Dao接口对应的Mapper文件xml文件，写sql语句
+5. 在`resources/mapper`中创建Dao接口对应的Mapper文件xml文件，写sql语句
 
-  ``` xaml
-  <?xml version="1.0" encoding="UTF-8" ?>
-  <!DOCTYPE mapper
-          PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-          "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  <mapper namespace="com.ming.dao.StudentDao">
-      <select id="selectById" resultType="com.ming.model.Student">
-          select id,name,age from student where id=#{stuId}
-      </select>
-  </mapper>
-  ```
+	``` java
+	<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE mapper
+	        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.ming.dao.StudentDao">
+	    <select id="selectById" resultType="com.ming.model.Student">
+	        select id,name,age from student where id=#{stuId}
+	    </select>
+	</mapper>
+	```
 
 6. 创建Service层对象，创建StudentService接口和他的实现类。dao对象的方法。完成数据库的操作
 
-  ``` java
-  public interface StudentService {
-      Student queryStudent(Integer id);
-  }
-  ```
+	``` java
+	public interface StudentService {
+	    Student queryStudent(Integer id);
+	}
+	```
 
-  ``` java
-  @Service
-  public class StudentServiceImpl implements StudentService {
-  
-      @Resource
-      private StudentDao studentDao;
-  
-      @Override
-      public Student queryStudent(Integer id) {
-          Student student = studentDao.selectById(id);
-          return student;
-      }
-  }
-  ```
+	```java
+	@Service
+	public class StudentServiceImpl implements StudentService {
+	
+	    @Resource
+	    private StudentDao studentDao;
+	
+	    @Override
+	    public Student queryStudent(Integer id) {
+	        Student student = studentDao.selectById(id);
+	        return student;
+	    }
+	}
+	```
 
 7. 创建Controller对象，访问Service
 
-  ``` java
-  @Controller
-  public class StudentController {
-  
-      @Resource
-      private StudentService studentService;
-  
-      @RequestMapping("/student/query")
-      @ResponseBody
-      public Object queryStudent(Integer id){
-          Student student = studentService.queryStudent(id);
-          return student;
-      }
-  }
-  ```
+	```java
+	@Controller
+	public class StudentController {
+	
+	    @Resource
+	    private StudentService studentService;
+	
+	    @RequestMapping("/student/query")
+	    @ResponseBody
+	    public Object queryStudent(Integer id){
+	        Student student = studentService.queryStudent(id);
+	        return student;
+	    }
+	}
+	```
 
 8. 写application.properties文件，配置数据库的连接信息
 
@@ -726,22 +728,20 @@ server.servlet.encoding.force=true
  */
 @Mapper
 public interface StudentDao {
-
     Student selectById(Integer id);
 }
-
 ```
 
 **2）第二种方式 ：@MapperScan**
 
 ``` java
-	/**
-	 * @MapperScan: 找到Dao接口和Mapper文件
-	 *     basePackages：Dao接口所在的包名
-	 */
-	@SpringBootApplication
-	@MapperScan(basePackages = {"com.ming.dao","com.ming.mapper"})
-	public class Application {
+/**
+ * @MapperScan: 找到Dao接口和Mapper文件
+ *     basePackages：Dao接口所在的包名
+ */
+@SpringBootApplication
+@MapperScan(basePackages = {"com.ming.dao","com.ming.mapper"})
+public class Application {
 }
 ```
 
@@ -749,7 +749,7 @@ public interface StudentDao {
 
 现在把Mapper文件放在resources目录下
 
-1. 在resources目录中创建子目录（自定义的），例如mapper
+1. 在resources目录中创建子目录，例如mapper
 
 2. 把mapper文件放到mapper目录中
 
@@ -760,20 +760,39 @@ public interface StudentDao {
 	mybatis.mapper-locations=classpath:mapper/*.xml
 	```
 
-4. 在pom.xml中指定把resources目录中的文件，编译到目标目录中
+4. 在pom.xml中指定把resources目录中的文件，编译到目标目录中。（==发现不指定resources，里面的文件依然可以编译到classes==）
 
 	``` xaml
-	<resources>
-	    <resource>
-	        <directory>src/main/resources</directory>
-	        <includes>
-	            <include>**/*.*</include>
-	        </includes>
-	    </resource>
-	</resources>
+	<build>
+	    <resources>
+	        <resource>
+	            <directory>src/main/resources</directory>
+	            <includes>
+	                <include>**/*.*</include>
+	            </includes>
+	        </resource>
+	    </resources>
+	</build>
 	```
 
-	
+	> .xml文件路径在java包下时，不可使用mybatis.mapper-locations配置，并且需要在pom.xm中需要指定resources，不然yml配置文件无法编译到classes中
+	>
+	> ``` xaml
+	> <resources>
+	>     <resource>
+	>        <directory>src/main/java</directory>
+	>            <includes>
+	>                <include>**/*.xml</include>
+	>            </includes>
+	>        <filtering>false</filtering>
+	>     </resource>
+	>     
+	>     <!--需要把resources里的文件编译到classes中去，不然没有yml配置文件-->
+	>     <resource>
+	>        <directory>src/main/resources</directory>
+	>     </resource>
+	> </resources>
+	> ```
 
 ### 事务
 
@@ -1044,7 +1063,7 @@ public class MyRestController {
 
 4. 集成idea（一定要为其他项目设置，不然新建的项目还是idea默认maven）
 
-	![](https://oss.mingever.com/note/springBoot/maven_idea.png)
+	<img src="https://oss.mingever.com/note/springBoot/maven_idea.png" style="zoom: 67%;" />
 
 
 
@@ -1101,34 +1120,32 @@ public class MyRestController {
 
 1. 依赖
 
-	``` xaml
-	<dependency>
-	    <groupId>com.baomidou</groupId>
-	    <artifactId>mybatis-plus-boot-starter</artifactId>
-	    <version>最新版本</version>
-	</dependency>
-	```
+  ``` xaml
+  <dependency>
+      <groupId>com.baomidou</groupId>
+      <artifactId>mybatis-plus-boot-starter</artifactId>
+      <version>最新版本</version>
+  </dependency>
+  ```
 
-2. 配置
+2. 配置 MapperScan 注解
 
-	- 配置 MapperScan 注解
+  ``` java
+  @SpringBootApplication
+  @MapperScan("com.ming.dao")
+  ```
 
-		``` java
-		@SpringBootApplication
-		@MapperScan("com.ming.dao")
-		```
+3. mybatis-plus设置
 
-	- 或在yml中指定
-
-		``` yaml
-		#mybatis-plus设置
-		mybatis-plus:
-		  #mapper位置
-		  mapper-locations: classpath:mapper/*.xml
-		  #configuration:
-		    #sql日志打印
-		    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-		```
+  ``` yaml
+  #mybatis-plus设置
+  mybatis-plus:
+    #mapper位置，默认值classpath*:/mapper/**/*.xml
+    mapper-locations: classpath:mapper/*.xml
+    #configuration:
+      #sql日志打印
+      #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  ```
 
 ### 注解
 
@@ -1178,17 +1195,17 @@ userName成员变量名默认映射是user_name字段；
 
 - **TableFieId**：字段注解（非主键）。主要用来解决实体类的字段名与数据库中的字段名不匹配的问题
 
-### 接口
+
+
+### 用法
 
 mybatis-plus 提供两种包含预定义增删改查操作的接口：`BaseMapper`和`IService`
 
 Mybatis-plus提供了2个接口1个类：
 
 - **BaseMapper\<T>**：针对dao层的方法封装CRUD，需要指定对应的实体类
-- **IService\<T>** 针对业务逻辑层的封装，需要指定对应的实体类，是在BaseMapper基础上的加强
-- **ServiceImpl<M extends BaseMapper\<T>, T> implements IService**：针对业务逻辑层的实现，需要指定Dao层类和对应的实体类
-
-### 用法
+- **IService\<T>** 针对业务逻辑层的封装，==需要指定对应的实体类==，是在BaseMapper基础上的加强
+- **ServiceImpl<M extends BaseMapper\<T>, T> implements IService**：针对业务逻辑层的实现，是==IService的实现类==，主要使用的就是这个，需要==指定Dao层类和对应的实体类==
 
 1. User实体类
 
@@ -1216,7 +1233,7 @@ Mybatis-plus提供了2个接口1个类：
 	
 	/*
 	Dao继承该接口后，无需编写mapper.xml文件，即可获得CRUD功能。
-	BaseMapper的泛型需要传入实体类，来与其绑定，生成代理对象，对其进行功能增强等（我猜的）
+	BaseMapper的泛型需要传对应的实体类
 	*/
 	```
 
@@ -1226,26 +1243,193 @@ Mybatis-plus提供了2个接口1个类：
 	public interface UserService extends IService<User>{}
 	
 	/*
-	IService是对BaserMapper的增强，泛型需要传入实体类，来与其绑定
+	IService是对BaserMapper的增强，泛型需要传入对应的实体类，来与其绑定
 	里面很多方法就是调用的BaserMapper的，只是改了个名字为了与BaserMapper的方法区分；有些方法是对BaserMapper的增强，另外还扩展了一些方法，如批量处理等。尽量用IService，BaserMapper有的它都有。
 	
-	service接口其实没必要继承IService，因为这里Userservice的实现类UserServiceImpl需要继承ServiceImpl。ServiceImpl里实现了IService，通过ServiceImpl就可以使用IService的默认方法，和其实现的IService的方法。
-	如果实现类不继承ServiceImpl，直接实现UserService接口的话，那么需要实现IService里的方法，显然这样不可以
-	
-	其实如果不考虑扩展的话，连service接口都不必要写
+	我们主要使用的是IService的实现类ServiceImpl，这里让UserService接口继承IService是为了定义我们自己的方法，然后在UserService接口的实现类UserServiceImpl里实现它就可以了
 	*/
 	```
-
+	
 4. UserService实现类
 
 	``` java
 	@Service
 	public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserService{}
-	```
-
 	
+	/*
+	ServiceImpl<M extends BaseMapper<T>, T> implements IService<T>
+	IService的实现类
+	泛型：M是mapper(Dao)对象，T是对应的实体类
+	对象Wrapper为条件构造器
+	
+	其实现了IService，依赖BaseMapper
+	实体类的BaseMapper通过@Autowired自动注入到了该类内让IService和ServiceImpl使用，所以说BasheMapper是非常核心的一个类
+	*/
+	```
+	
+	<img src="https://oss.mingever.com/note/springBoot/mybatisPlusDepend.png" style="zoom:80%;" />
 
 
+
+### 插件主体
+
+MybatisPlusInterceptor：mybatis-plus插件主体，该插件是核心插件，版本要求：3.4.0 版本以上
+
+> 可以把启动类上面的@MapperScan放到这里来
+
+``` java
+@Configuration
+@MapperScan(basePackages = {"com.ming.system.domain.dao","com.ming.reception.domain.dao"})
+public class MybatisPlusConfig {
+    @Bean
+    public MybatisPlusInterceptor mybatisPlusInterceptor() {
+        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        //添加分页插件
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
+        return interceptor;
+    }
+}
+```
+
+### Service接口
+
+- 通用Service CRUD封装IService接口，进一步封装 CRUD，采用 `get 查询单行` `remove 删除` `list 查询集合` `page 分页` 前缀命名方式区分 `Mapper` 层避免混淆，[具体文档](https://baomidou.com/pages/49cc81/#service-crud-%E6%8E%A5%E5%8F%A3)
+- 泛型 `T` 为任意实体对象
+- 对象 `Wrapper` 为条件构造器
+
+#### Save
+
+```java
+// 插入一条记录；T entity：实体对象
+boolean save(T entity);
+// 批量插入；entityList：实体对象集合
+boolean saveBatch(Collection<T> entityList);
+// 批量插入；int batchSize：插入批次数量
+boolean saveBatch(Collection<T> entityList, int batchSize);
+```
+
+#### SaveOrUpdate
+
+``` java
+// 当实体中的主键为null时，执行insert，当主键不为空时，执行updata
+boolean saveOrUpdate(T entity);
+// 根据updateWrapper尝试更新，否继续执行saveOrUpdate(T)方法
+boolean saveOrUpdate(T entity, Wrapper<T> updateWrapper);
+// 批量修改插入
+boolean saveOrUpdateBatch(Collection<T> entityList);
+// 批量修改插入
+boolean saveOrUpdateBatch(Collection<T> entityList, int batchSize);
+```
+
+#### Remove
+
+```java
+// 根据 entity 条件，删除记录
+boolean remove(Wrapper<T> queryWrapper);
+// 根据 ID 删除
+boolean removeById(Serializable id);
+// 根据 columnMap 条件，删除记录
+boolean removeByMap(Map<String, Object> columnMap);
+// 删除（根据ID 批量删除）
+boolean removeByIds(Collection<? extends Serializable> idList);
+```
+
+#### Update
+
+``` java
+// 根据 UpdateWrapper 条件，更新记录 需要设置sqlset
+boolean update(Wrapper<T> updateWrapper);
+// 根据 whereWrapper 条件，更新记录
+boolean update(T updateEntity, Wrapper<T> whereWrapper);
+// 根据 ID 选择修改
+boolean updateById(T entity);
+// 根据ID 批量更新
+boolean updateBatchById(Collection<T> entityList);
+// 根据ID 批量更新
+boolean updateBatchById(Collection<T> entityList, int batchSize);
+```
+
+#### Get
+
+``` java
+// 根据 ID 查询
+T getById(Serializable id);
+// 根据 Wrapper，查询一条记录。结果集，如果是多个会抛出异常，随机取一条加上限制条件 wrapper.last("LIMIT 1")
+T getOne(Wrapper<T> queryWrapper);
+// 根据 Wrapper，查询一条记录
+T getOne(Wrapper<T> queryWrapper, boolean throwEx);
+// 根据 Wrapper，查询一条记录
+Map<String, Object> getMap(Wrapper<T> queryWrapper);
+// 根据 Wrapper，查询一条记录
+<V> V getObj(Wrapper<T> queryWrapper, Function<? super Object, V> mapper);
+```
+
+#### List
+
+```java
+// 查询所有
+List<T> list();
+// 查询列表
+List<T> list(Wrapper<T> queryWrapper);
+// 查询（根据ID 批量查询）
+Collection<T> listByIds(Collection<? extends Serializable> idList);
+// 查询（根据 columnMap 条件）
+Collection<T> listByMap(Map<String, Object> columnMap);
+// 查询所有列表
+List<Map<String, Object>> listMaps();
+// 查询列表
+List<Map<String, Object>> listMaps(Wrapper<T> queryWrapper);
+// 查询全部记录
+List<Object> listObjs();
+// 查询全部记录
+<V> List<V> listObjs(Function<? super Object, V> mapper);
+// 根据 Wrapper 条件，查询全部记录
+List<Object> listObjs(Wrapper<T> queryWrapper);
+// 根据 Wrapper 条件，查询全部记录
+<V> List<V> listObjs(Wrapper<T> queryWrapper, Function<? super Object, V> mapper);
+```
+
+#### Page
+
+```java
+// 无条件分页查询
+IPage<T> page(IPage<T> page);
+// 条件分页查询
+IPage<T> page(IPage<T> page, Wrapper<T> queryWrapper);
+// 无条件分页查询
+IPage<Map<String, Object>> pageMaps(IPage<T> page);
+// 条件分页查询
+IPage<Map<String, Object>> pageMaps(IPage<T> page, Wrapper<T> queryWrapper);
+```
+
+Demo
+
+```java
+public IPage<User> page(Integer pageNum, Integer pageSize, String userId, String name) {
+    IPage<User> page = new Page<>(pageNum,pageSize);
+    QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+    if (!"".equals(userId)) {
+        queryWrapper.like("user_id", userId);
+    }
+    if (!"".equals(name)) {
+        queryWrapper.like("name",name);
+    }
+
+    //按照创建时间排序
+    queryWrapper.orderByAsc("create_time");
+
+    return page(page,queryWrapper);
+}
+```
+
+#### Count
+
+```java
+// 查询总记录数
+int count();
+// 根据 Wrapper 条件，查询总记录数
+int count(Wrapper<T> queryWrapper);
+```
 
 
 
