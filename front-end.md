@@ -36,7 +36,8 @@ HTML 不是一种编程语言，而是一种标记语言，使用标记来描述
 	- bgproperties=fixed：使背景图片成水印效果，即图片不随滚动条的滚动而滚动
 
 - `<p>` 段落标记
-  - alight
+
+	align
 
 - `<br>` 换行标记
 
@@ -237,21 +238,21 @@ HTML 不是一种编程语言，而是一种标记语言，使用标记来描述
 
 	- ==type==属性来决定类型，即`<input type="">`，可以取值是：
 
-		​	text 文字字段      password 密码域
+		text 文字字段      password 密码域
 
-		​	radio 单选按钮     checkbox 复选框
+		radio 单选按钮     checkbox 复选框
 
-		​	button 普通按钮   submit  提交按钮   reset重置按钮
+		button 普通按钮   submit  提交按钮   reset重置按钮
 
-		​	image 图像域     select 下拉列表
+		image 图像域     select 下拉列表
 
-		​	hidden 隐藏域
+		hidden 隐藏域
 
-		​	file 文件域 
+		file 文件域 
 
-		​	optgroup 定义选项组
+		optgroup 定义选项组
 
-		​	email  month number range time等html新标记
+		email  month number range time等html新标记
 
 	- ==name==属性：指定表单控件的名称 
 
@@ -1093,9 +1094,9 @@ padding（填充）是一个简写属性，定义元素边框与元素内容之�
 
 	display属性设置一个元素应如何显示，visibility属性指定一个元素应可见还是隐藏
 
-	​	`display:none`：可以隐藏某个元素，且隐藏的元素不会占用任何空间
+	`display:none`：可以隐藏某个元素，且隐藏的元素不会占用任何空间
 
-	​	`visibility:hidden`：可以隐藏某个元素，但隐藏的元素仍需占用与未隐藏之前一样的空间
+	`visibility:hidden`：可以隐藏某个元素，但隐藏的元素仍需占用与未隐藏之前一样的空间
 
 - 内联元素和块元素
 

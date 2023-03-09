@@ -2,33 +2,33 @@
 
 1. 拉取
 
-``` bash
-docker pull redis
-```
+	```bash
+	docker pull redis
+	```
 
 2. 安装
 
-``` bash
-docker run --restart=always \
--d -p 6379:6379 \
---name redis \
--v /root/redis/conf/redis.conf:/etc/redis/redis.conf \
--v /root/redis/data:/data \
-redis:6.0.16 \
-redis-server /etc/redis/redis.conf \
---requirepass 169736
+	```bash 
+	docker run --restart=always \
+	-d -p 6379:6379 \
+	--name redis \
+	-v /root/redis/conf/redis.conf:/etc/redis/redis.conf \
+	-v /root/redis/data:/data \
+	redis:6.0.16 \
+	redis-server /etc/redis/redis.conf \
+	--requirepass 169736
+	
+	#说明：
+	#–restart=always                     总是开机启动
+	#redis-server /etc/redis/redis.conf  以配置文件启动redis，加载容器内的conf文件
+	#–appendonly yes                     开启aof持久化，默认是rdb
+	#–requirepass 169736                 设置密码(向外开放，一定要设置密码，否则会有挖矿木马)
+	#直接创建的redis容器里是没有配置文件的，该配置文件是需要在创建容器时映射进来的，需要从官网下载。和nginx容器内自带配置文件不一样
+	#redis.conf中，daemoinze要设置为no，禁止后台启动，否咋会与docker的 -d发送冲突
+	#-v /root/redis-demo/conf:/etc/redis 也可以把配置文件复制到文件夹里，然后直接挂载文件夹。推荐挂载文件夹，挂载文件的话，因为inode映射，需要为宿主文件赋予777权限才不需要重启，chmod 777 redis.conf。
+	```
 
-#说明：
-#–restart=always                     总是开机启动
-#redis-server /etc/redis/redis.conf  以配置文件启动redis，加载容器内的conf文件
-#–appendonly yes                     开启aof持久化，默认是rdb
-#–requirepass 169736                 设置密码(向外开放，一定要设置密码，否则会有挖矿木马)
-#直接创建的redis容器里是没有配置文件的，该配置文件是需要在创建容器时映射进来的，需要从官网下载。和nginx容器内自带配置文件不一样
-#redis.conf中，daemoinze要设置为no，禁止后台启动，否咋会与docker的 -d发送冲突
-#-v /root/redis-demo/conf:/etc/redis 也可以把配置文件复制到文件夹里，然后直接挂载文件夹。推荐挂载文件夹，挂载文件的话，因为inode映射，需要为宿主文件赋予777权限才不需要重启，chmod 777 redis.conf。
-```
-
-[docker挂载文件和文件夹相关问题 ](https://segmentfault.com/a/1190000015684472#:~:text=)
+	[docker挂载文件和文件夹相关问题 ](https://segmentfault.com/a/1190000015684472#:~:text=)
 
 
 

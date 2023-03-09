@@ -10,33 +10,37 @@
 	- ==放在类上==，声明这个类为==配置类==，表示这个类作为配置文件使用
 	- 里面添加了@Component注解
 	- 在被@Configuration注解的类中所有带有@Bean注解的方法都会被CGLib动态代理，而后每次调用这些方法时返回的都是第一次返回的实例
+
 2. @Bean
-  - 在@Configuration修饰的类中使用，==放在方法上==。
-  - 告诉方法，产生一个Bean对象，然后这个Bean对象交给Spring管理。即声明对象，把对象注入到容器中
-  - 未指定bean 的名称，默认bean的名称是==方法名 + 首字母小写==
 
-``` java
-@Configuration
-publie class MyConfig{
-	
-    @Bean
-	public MyBean myBean() {
-        // instantiate and configure MyBean obj
-         return obj;
-    }
-}
-```
+	- 在@Configuration修饰的类中使用，==放在方法上==。
 
-> @Component（和@Service和@Repository）用于自动检测和使用类路径扫描自动配置bean。注释类和bean之间存在隐式的一对一映射（即每个类一个bean）。该注解作用于类
->
-> @Bean用于显式声明单个bean，而不是让Spring像上面那样自动执行它。它将bean的声明与类定义分离，并允许您精确地创建和配置bean。常和@Configuration注解搭配使用。该注解的方法返回值是对象，可以在方法中为对象设置属性。
->
-> 区别：
->
-> 1. 作用对象不同：`@Component` 注解作用于类，而 `@Bean` 注解作用于方法
-> 2. `@Component` 通常是通过路径扫描来自动侦测以及自动装配到 Spring 容器中(我们可以使用 `@ComponentScan` 注解定义要扫描的路径从中找出标识了需要装配的类自动装配到 Spring 的 bean 容器中)。`@Bean` 注解通常是我们在标有该注解的方法中定义产生这个 bean，`@Bean` 告诉了 Spring 这是某个类的实例，当我们需要用它的时候还给我。
-> 3. `@Bean` 注解比 `@Component` 注解的自定义性更强，而且很多地方我们只能通过 `@Bean` 注解来注册 bean。比如当我们引用第三方库中的类需要装配到 Spring 容器时，只能通过 `@Bean` 来实现。
-> 4. 两者都可以使用@Autowired或者@Resource注解注入
+	- 告诉方法，产生一个Bean对象，然后这个Bean对象交给Spring管理。即声明对象，把对象注入到容器中
+
+	- 未指定bean 的名称，默认bean的名称是==方法名 + 首字母小写==
+
+	``` java
+	@Configuration
+	publie class MyConfig{
+		
+	    @Bean
+		public MyBean myBean() {
+	        // instantiate and configure MyBean obj
+	         return obj;
+	    }
+	}
+	```
+
+	> @Component（和@Service和@Repository）用于自动检测和使用类路径扫描自动配置bean。注释类和bean之间存在隐式的一对一映射（即每个类一个bean）。该注解作用于类
+	>
+	> @Bean用于显式声明单个bean，而不是让Spring像上面那样自动执行它。它将bean的声明与类定义分离，并允许您精确地创建和配置bean。常和@Configuration注解搭配使用。该注解的方法返回值是对象，可以在方法中为对象设置属性。
+	>
+	> 区别：
+	>
+	> 1. 作用对象不同：`@Component` 注解作用于类，而 `@Bean` 注解作用于方法
+	> 2. `@Component` 通常是通过路径扫描来自动侦测以及自动装配到 Spring 容器中(我们可以使用 `@ComponentScan` 注解定义要扫描的路径从中找出标识了需要装配的类自动装配到 Spring 的 bean 容器中)。`@Bean` 注解通常是我们在标有该注解的方法中定义产生这个 bean，`@Bean` 告诉了 Spring 这是某个类的实例，当我们需要用它的时候还给我。
+	> 3. `@Bean` 注解比 `@Component` 注解的自定义性更强，而且很多地方我们只能通过 `@Bean` 注解来注册 bean。比如当我们引用第三方库中的类需要装配到 Spring 容器时，只能通过 `@Bean` 来实现。
+	> 4. 两者都可以使用@Autowired或者@Resource注解注入
 
 
 
@@ -109,15 +113,15 @@ SpringBoot 中默认的配置文件是resources 目录下的 application.propert
 
 ### 创建SpringBoot项目
 
-第一种方式：使用Spring提供的初始化器，就是向导创建SpringBoot应用
+1. 第一种方式：使用Spring提供的初始化器，就是向导创建SpringBoot应用
 
-​	使用的地址： https://start.spring.io
+	[使用的地址](https://start.spring.io)
 
-​	使用国内的地址：https://start.springboot.io
+	[使用国内的地址](https://start.springboot.io)
 
-> - [x] Spring Web
+	> - [x] Spring Web
 
-第二种方式：使用 maven 向导创建项目，即自己加入SpringBoot依赖，修改目录结构，创建启动类
+2. 第二种方式：使用 maven 向导创建项目，即自己加入SpringBoot依赖，修改目录结构，创建启动类
 
 
 
@@ -125,11 +129,11 @@ SpringBoot 中默认的配置文件是resources 目录下的 application.propert
 
 复合注解：由三个注解组成
 
-​	@SpringBootConfiguration
+- @SpringBootConfiguration
 
-​	@EnableAutoConfiguration
+- @EnableAutoConfiguration
 
-​	@ComponentScan
+- @ComponentScan
 
 #### @SpringBootConfiguration
 
@@ -798,44 +802,46 @@ public class Application {
 
 **1）Spring框架中的事务**
 
-1. 管理事务的对象：事务管理器（接口，接口有很多的实现类）
+- 管理事务的对象：事务管理器（接口，接口有很多的实现类）
 
-	​	例如：使用Jdbc或mybatis访问数据库，使用的事务管理器：DataSourceTransactionManager
+	例如：使用Jdbc或mybatis访问数据库，使用的事务管理器：DataSourceTransactionManager
 
-2. 声明式事务：在xml配置文件或者使用注解说明事务控制的内容
+- 声明式事务：在xml配置文件或者使用注解说明事务控制的内容
 
-​			控制事务： 隔离级别，传播行为， 超时时间
+	控制事务： 隔离级别，传播行为， 超时时间
 
-3. 事务处理方式
-	1. Spring框架中的@Transactional
-	2. aspectj框架可以在xml配置文件中，声明事务控制的内容
+- 事务处理方式
+
+	- Spring框架中的@Transactional
+	- aspectj框架可以在xml配置文件中，声明事务控制的内容
 
 **2）SpringBoot中使用事务：上面的两种方式都可以**
 
 1. 在业务方法的上面加入@Transactional , 注解后，方法就有事务功能了
+
 2. 在启动类的上面，加入@EnableTransactionManager
 
-``` java
-/**
- * @Transactional: 表示方法的有事务支持
- *       默认：使用库的隔离级别， REQUIRED 传播行为； 超时时间  -1
- *       抛出运行时异常，回滚事务
- */
-@Transactional
-@Override
-public int addStudent(Student student) {
-    System.out.println("业务方法addStudent");
-    int rows  =  studentDao.insert(student);
-    System.out.println("执行sql语句");
+	```java
+	/**
+	 * @Transactional: 表示方法的有事务支持
+	 *       默认：使用库的隔离级别， REQUIRED 传播行为； 超时时间  -1
+	 *       抛出运行时异常，回滚事务
+	 */
+	@Transactional
+	@Override
+	public int addStudent(Student student) {
+	    System.out.println("业务方法addStudent");
+	    int rows  =  studentDao.insert(student);
+	    System.out.println("执行sql语句");
+	
+	    //抛出一个运行时异常， 目的是回滚事务
+	    //int m   = 10 / 0 ;
+	
+	    return rows;
+	}
+	```
 
-    //抛出一个运行时异常， 目的是回滚事务
-    //int m   = 10 / 0 ;
-
-    return rows;
-}
-```
-
-
+	
 
 ## RESTful
 
@@ -855,24 +861,23 @@ Representational State Transfer , 表现层状态转移
 
 3. 表现层状态转移
 
-  - 表现层就是视图层，显示资源的，通过视图页面，jsp等等显示操作资源的结果。
-  -  状态：资源变化
-  - 转移：资源可以变化的。资源能创建，new状态，资源创建后可以查询资源，能看到资源的内容，这个资源内容 ，可以被修改，修改后资源和之前的不一样。 
+	- 表现层就是视图层，显示资源的，通过视图页面，jsp等等显示操作资源的结果。
+	- 状态：资源变化
+	- 转移：资源可以变化的。资源能创建，new状态，资源创建后可以查询资源，能看到资源的内容，这个资源内容 ，可以被修改，修改后资源和之前的不一样。 
 
 4. 一句话说明REST：==使用url表示资源 ，使用http动作操作资源==
 
-	​	URL定位资源，用HTTP动词(GET,POST,DELETE,PUT)描述操作
+	URL定位资源，用HTTP动词(GET,POST,DELETE,PUT)描述操作
 
-	​	看Url就知道要什么
+	看Url就知道要什么
 
-	​	看http method就知道干什么
+	看http method就知道干什么
 
-	​	看http status code就知道结果如何
+	看http status code就知道结果如何
 
 5. 冲突：要保证==请求方式+请求路径==一定是唯一的。RESRful很容易发送冲突，发生冲突后，要：
-
-	1. 更改请求方式
-	2. 改变请求路径
+	- 更改请求方式
+	- 改变请求路径
 
 
 ### REST中的要素
@@ -883,23 +888,24 @@ Representational State Transfer , 表现层状态转移
 
 	- GET: 查询资源 -- sql select
 
-		​	处理单个资源： 用他的单数方式
+		处理单个资源： 用他的单数方式
 
-		 	http://localhost:8080/myboot/student/1001
-	 	
-		 	http://localhost:8080/myboot/student/1001/1
+		```http
+		http://localhost:8080/myboot/student/1001
+		http://localhost:8080/myboot/student/1001/1
+		```
 
-		​	处理多个资源：使用复数形式
+		处理多个资源：使用复数形式
 
-		​	http://localhost:8080/myboot/students/1001/1002
+		```http
+		http://localhost:8080/myboot/students/1001/1002
+		```
 
 	- POST: 创建资源 -- sql insert
 
-		​	http://localhost:8080/myboot/student
-
-		​	在post请求中传递数据
-
-		``` html
+		```html
+		<!--http://localhost:8080/myboot/student-->
+		<!--在post请求中传递数据-->
 		<form action="http://localhost:8080/myboot/student" method="post">
 		    姓名：<input type="text" name="name" />
 		    年龄：<input type="text" name="age" />
@@ -908,7 +914,7 @@ Representational State Transfer , 表现层状态转移
 
 	- PUT： 更新资源 -- sql update
 
-		``` html
+		```html
 		<form action="http://localhost:8080/myboot/student/1" method="post">
 		    姓名：<input type="text" name="name" />
 		    年龄：<input type="text" name="age" />
@@ -918,24 +924,24 @@ Representational State Transfer , 表现层状态转移
 
 	- DELETE: 删除资源 -- sql delete
 
-		``` html
+		```html
 		<a href="http://localhost:8080/myboot/student/1">删除1的数据</a>
 		```
 
 	- 需要的分页， 排序等参数，依然放在url的后面
 
-		​	http://localhost:8080/myboot/students?page=1&pageSize=20
+		```http
+		http://localhost:8080/myboot/students?page=1&pageSize=20
+		```
+
+	> 老版本浏览器或html老版本中，form表单中的method可能不支持put、delete，需要在SpringMVC中开启一个过滤器，将post请求转为put ,delete
+	>
+	> ``` properties
+	> #启用支持put，delete
+	> spring.mvc.hiddenmethod.filter.enabled=true
+	> ```
 
 
-
-> 老版本浏览器或html老版本中，form表单中的method可能不支持put、delete，需要在SpringMVC中开启一个过滤器，将post请求转为put ,delete
->
-> ``` properties
-> #启用支持put，delete
-> spring.mvc.hiddenmethod.filter.enabled=tr
-> ```
->
-> 
 
 ### 注解
 
@@ -1035,9 +1041,7 @@ public class MyRestController {
 
 1. 下载
 
-	解压后放到目录即可
-
-	 http://maven.apache.org/download.html 
+	[下载地址]( http://maven.apache.org/download.html )，解压后放到目录即可
 
 2. 配置环境变量
 
@@ -1045,9 +1049,9 @@ public class MyRestController {
 
 	通过`mvn -v`来测试
 
-3. 打开conf\settings.xml文件，配置本地仓库地址和阿里云远程仓库
+3. 打开`conf\settings.xml`文件，配置本地仓库地址和阿里云远程仓库
 
-	``` xaml
+	```xaml
 	<!--注意/不要写反-->
 	<localRepository>D:/install/maven/repositary</localRepository>
 	
@@ -1064,8 +1068,6 @@ public class MyRestController {
 4. 集成idea（一定要为其他项目设置，不然新建的项目还是idea默认maven）
 
 	<img src="https://oss.mingever.com/note/springBoot/maven_idea.png" style="zoom: 67%;" />
-
-
 
 ## Lombok
 
@@ -1120,32 +1122,34 @@ public class MyRestController {
 
 1. 依赖
 
-  ``` xaml
+  ````java
   <dependency>
       <groupId>com.baomidou</groupId>
       <artifactId>mybatis-plus-boot-starter</artifactId>
       <version>最新版本</version>
   </dependency>
-  ```
+  ````
 
 2. 配置 MapperScan 注解
 
-  ``` java
-  @SpringBootApplication
-  @MapperScan("com.ming.dao")
-  ```
+	```java
+	  @SpringBootApplication
+	  @MapperScan("com.ming.dao")
+	```
 
 3. mybatis-plus设置
 
-  ``` yaml
-  #mybatis-plus设置
-  mybatis-plus:
-    #mapper位置，默认值classpath*:/mapper/**/*.xml
-    mapper-locations: classpath:mapper/*.xml
-    #configuration:
-      #sql日志打印
-      #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  ```
+	```yaml
+	#mybatis-plus设置
+	mybatis-plus:
+	  #mapper位置，默认值classpath*:/mapper/**/*.xml
+	  mapper-locations: classpath:mapper/*.xml
+	  #configuration:
+	    #sql日志打印
+	    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+	```
+
+
 
 ### 注解
 

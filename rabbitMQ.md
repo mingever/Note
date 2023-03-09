@@ -48,30 +48,30 @@ RabbitMQ是一款使用Erlang语言开发的，实现AMQP(高级消息队列协�
 
 1. 拉取
 
-在[docker hub](https://hub.docker.com/)里搜索rabbitmq，选择带有mangement的版本
+	在[docker hub](https://hub.docker.com/)里搜索rabbitmq，选择带有mangement的版本
 
-``` bash
-docker pull rabbitmq:3.11.9-management
-```
+	```bash
+	docker pull rabbitmq:3.11.9-management
+	```
 
 2. 安装
 
-``` bash
-docker run \
--d --name rabbitmq \
--p 5672:5672 \
--p 15672:15672 \
--v /root/rabbitmq:/var/lib/rabbitmq \
---hostname myRabbit \
--e RABBITMQ_DEFAULT_VHOST=my_vhost \
--e RABBITMQ_DEFAULT_USER=admin \
--e RABBITMQ_DEFAULT_PASS=169736 \
-rabbitmq:3.11.9-management
-
-#-p 指定服务运行的端口（5672：应用访问端口；15672：控制台Web端口号）
-#--hostname  主机名（RabbitMQ的一个重要注意事项是它根据所谓的 “节点名称” 存储数据，默认为主机名）
-#-e 指定环境变量，默认虚拟机名，默认用户名和默认用户名密码
-```
+	```bash
+	docker run \
+	-d --name rabbitmq \
+	-p 5672:5672 \
+	-p 15672:15672 \
+	-v /root/rabbitmq:/var/lib/rabbitmq \
+	--hostname myRabbit \
+	-e RABBITMQ_DEFAULT_VHOST=my_vhost \
+	-e RABBITMQ_DEFAULT_USER=admin \
+	-e RABBITMQ_DEFAULT_PASS=169736 \
+	rabbitmq:3.11.9-management
+	
+	#-p 指定服务运行的端口（5672：应用访问端口；15672：控制台Web端口号）
+	#--hostname  主机名（RabbitMQ的一个重要注意事项是它根据所谓的 “节点名称” 存储数据，默认为主机名）
+	#-e 指定环境变量，默认虚拟机名，默认用户名和默认用户名密码
+	```
 
 ## 集成springboot
 

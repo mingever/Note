@@ -52,22 +52,18 @@ win11只需要执行`wsl --install`，win10需要2004及以上版本来执行一
 
 1. 为root设置密码
 
-	``` bash
+	```bash
 	#wsl创建完成后，是通过自定义的用户和密码进行登录的，需要为root设置密码
 	sudo passwd  root
 	```
 
-
 2. 修改为默认root登录
 
-  进入到`ubuntu2204.exe`的路径内 
-  C:\Program Files\WindowsApps\CanonicalGroupLimited.Ubuntu22.04LTS_2204.2.37.0_x64__79rhkp1fndgsc\ubuntu2204.exe 执行
+	进入到`ubuntu2204.exe`的路径内 
+	C:\Program Files\WindowsApps\CanonicalGroupLimited.Ubuntu22.04LTS_2204.2.37.0_x64__79rhkp1fndgsc\ubuntu2204.ex
+	执行`ubuntu2204.exe config --default-user root`
 
-  ``` bash
-  ubuntu2204.exe config --default-user root
-  ```
-
-  >WindowsApp因为是Windows商店UWP的目录，所以因为权限进不去，可以用powershell cd进去
+	> WindowsApp因为是Windows商店UWP的目录，所以因为权限进不去，可以用powershell cd进去
 
 **2）为root用户增加配色**
 

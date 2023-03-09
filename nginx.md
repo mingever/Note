@@ -58,13 +58,13 @@ docekr中nginx的默认路径位置
 
 - html：/usr/share/nginx/html
 
-	​	网站文件存放的地方, 默认只有Nginx欢迎页面, 可以通过改变Nginx配置文件的方式来修改这个位置
+	网站文件存放的地方, 默认只有Nginx欢迎页面, 可以通过改变Nginx配置文件的方式来修改这个位置
 
 - log：/var/log/nginx
 
-	​	access.log：每一个访问请求都会默认记录在这个文件中
+	access.log：每一个访问请求都会默认记录在这个文件中
 
-	​	error.log：  任何Nginx的错误信息都会记录到这个文件中
+	error.log：  任何Nginx的错误信息都会记录到这个文件中
 
 > nginx容器/etc/nginx/conf.d文件夹内，自带default.conf配置文件。和redis不一样，redis容器内是不带配置文件的
 >
