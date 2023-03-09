@@ -692,7 +692,7 @@ window.onload = long;
 
 外部样式表通常存储在 CSS 文件中，多个样式定义可层叠为一个
 
-### 语法
+**1）语法**
 
 由两个主要的部分构成：选择器，以及一条或多条声明
 
@@ -748,7 +748,7 @@ window.onload = long;
 	- CSS声明总是以分号 `;` 结束，声明总以大括号 `{}` 括起来
 	- 属性是你希望设置的样式属性。每个属性有一个值。属性和值被冒号分开
 
-### 创建
+**2）创建**
 
 - 外部样式表：当样式需要应用于很多页面时。每个页面使用 `<link>` 标签链接到样式表，`<link>` 标签在文档头部
 
@@ -2313,13 +2313,827 @@ finally 语句在 try 和 catch 语句之后，无论是否有触发异常，该
 
 ## 表单验证
 
+HTML 表单验证可以通过 JavaScript 来完成
+
+1. 判断表单字段(fname)值是否存在， 如果不存在，就弹出信息，阻止表单提交
+
+	`onsubmit` 事件在表单提交时触发
+
+	```html
+	<script>
+	    function vaildateForm() {
+	        var x = document.forms["MyForm"]["name"].value;
+	        if (x == null || x == "") {
+	            alert("需要输入名字");
+	            return false;
+	        }
+	    }
+	</script>
+	
+	<body>
+	    <form name="MyForm" onsubmit="vaildateForm()">
+	        名字：<input type="text" name="name">
+	        <input type="submit" value="提交">
+	    </form>
+	</body>
+	```
+
+2. 验证输入的数字
+
+	```html
+	<script>
+	    function vaildateForm() {
+	        var x = document.getElementById("numb").value;
+	        var text;
+	        // 如果输入的值 x 不是数字或者小于 1 或者大于 10，输出错误
+	        // isNaN()可以判断是不是字符串
+	        if (isNaN(x) || x < 1 || x > 10) {
+	            text = "输入错误"
+	        } else {
+	            text = "输入正确";
+	        }
+	        document.getElementById("demo").innerHTML = text;
+	    }
+	</script>
+	
+	<body>
+	    <input id="numb" type="text">
+	    <input type="button" onclick="vaildateForm()" value="提交">
+	    <p id="demo"></p>
+	</body>
+	```
+
+3. HTML 表单自动验证
+
+	使用input的 `required` 属性，即html约束验证
+
+	```javascript
+	disabled	规定输入的元素不可用
+	max	        规定输入元素的最大值
+	min	        规定输入元素的最小值
+	pattern	    规定输入元素值的模式
+	required	规定输入元素字段是必需的
+	type 	    规定输入元素的类型
+	```
+
+4. JavaScript 验证 API
+
+	- 约束验证 DOM 方法
+
+		checkValidity()：如果 input 元素中的数据是合法的返回 true，否则返回 false
+
+		```html
+		<script>
+		    function myFunction() {
+		        var inpObj = document.getElementById("id1");
+		        if (inpObj.checkValidity() == false) {
+		            document.getElementById("demo").innerHTML = inpObj.validationMessage;
+		        } else {
+		            document.getElementById("demo").innerHTML = "输入正确";
+		        }
+		    }
+		</script>
+		
+		<body>
+		<input id="id1" type="number" min="100" max="300" required>
+		<button onclick="myFunction()">验证</button>
+		<p id="demo"></p>
+		</body>
+		```
+
+	- 约束验证 DOM 属性
+
+		```javascript
+		validity	             布尔属性值，返回 input 输入值是否合法
+		validationMessage	     浏览器错误提示信息
+		willValidate	         指定 input 是否需要验证
+		```
+
+	- Validity 属性
+
+		input 元素的 validity 属性包含一系列关于 validity 数据属性
+
+		```javascript
+		customError	            设置为 true, 如果设置了自定义的 validity 信息。
+		patternMismatch	        设置为 true, 如果元素的值不匹配它的模式属性。
+		rangeOverflow	        设置为 true, 如果元素的值大于设置的最大值。
+		rangeUnderflow	        设置为 true, 如果元素的值小于它的最小值。
+		stepMismatch	        设置为 true, 如果元素的值不是按照规定的 step 属性设置。
+		tooLong	                设置为 true, 如果元素的值超过了 maxLength 属性设置的长度。
+		typeMismatch	        设置为 true, 如果元素的值不是预期相匹配的类型。
+		valueMissing	        设置为 true，如果元素 (required 属性) 没有值。
+		valid	                设置为 true，如果元素的值是合法的。
+		```
+
+		```html
+		<script>
+		    function myFunction() {
+		        var txt = "";
+		        if (document.getElementById("id1").validity.rangeOverflow) {
+		            txt = "输入的值太大了";
+		        } else {
+		            txt = "输入正确";
+		        }
+		        document.getElementById("demo").innerHTML = txt;
+		    }
+		</script>
+		<body>
+		    <input id="id1" type="number" max="100">
+		    <button onclick="myFunction()">验证</button>
+		    <p>如果输入的数字大于 100 ( input 的 max 属性), 会显示错误信息。</p>
+		    <p id="demo"></p>
+		</body>
+		```
+
 ## JSON
+
+JavaScript Object Notation，是一种轻量级的数据交换格式
+
+JSON 是用于存储和传输数据的格式。
+
+JSON 通常用于服务端向网页传递数据 
+
+描述JSON格式数据的语法采用了JS对象字面量的表示方法，但是你不能把JS对象看做就是JSON
+
+可以说这种数据格式是从JavaScript对象中演变出来的，它是JavaScript的一个子集，它用严格的JavaScript对象表示法来表示结构化的数据
+
+可以这样看，JSON 是 JS 对象的字符串表示法。它使用文本表示一个JS对象的信息，JSON本质是一个字符串。
+
+由于这种相似性，无需解析器，JavaScript 程序能够使用内建的 eval() 函数，用 JSON 数据来生成原生的 JavaScript 对象。
+
+```json
+//以下 JSON 语法定义了 sites 对象：3 条网站信息（对象）的数组
+{"sites":[
+    {"name":"Runoob", "url":"www.runoob.com"}, 
+    {"name":"Google", "url":"www.google.com"},
+    {"name":"Taobao", "url":"www.taobao.com"}
+]}
+```
+
+**1）JSON 格式化后为 JavaScript 对象**
+
+JSON 格式在语法上与创建 JavaScript 对象代码是相同的， JavaScript程序可以很容易的将JSON数据转换为JavaScript对象
+
+**2）JSON 语法规则**
+
+数据为 键/值 对
+数据由逗号分隔
+大括号保存对象
+方括号保存数组
+
+**3）JSON 数据**
+
+一个名称对应一个值
+
+JSON 数据格式为 键/值 对，就像 JavaScript 对象属性
+
+键/值对包括字段名称（在双引号中），后面一个冒号，然后是值
+
+```json
+//JSON 值可以是
+
+//数字（整数或浮点数）
+{ "age":30 }
+//字符串（在双引号中）
+//逻辑值（true 或 false）
+{ "flag":true }
+//数组（在中括号中）
+//对象（在大括号中）
+//null
+{ "runoob":null }
+```
+
+**4）JSON 对象**
+
+JSON 对象保存在大括号内。就像在 JavaScript中，对象可以保存多个键/值对
+`{"name":"Runoob", "url":"www.runoob.com"}`
+
+- 语法
+
+	- SON 对象使用在大括号`{}`中书写
+	- 对象可以包含多个 `key/value`对
+	- ==key 必须是字符串==，value 可以是合法的 JSON 数据类型（字符串, 数字, 对象, 数组, 布尔值或 null）
+	- key 和 value 中使用冒号 `:` 分割。
+	- 每个 key/value 对使用逗号 `,` 分割
+
+- 可以使用点号 `.` 来访问对象的值
+
+	``` javascript
+	var obj, x;
+	obj = { "name":"runoob", "alexa":10000, "site":null };
+	x = obj.name;
+	```
+
+- 可以使用 for-in 来循环对象的属性
+
+	```javascript
+	var myObj = { "name":"runoob", "alexa":10000, "site":null };
+	for (x in myObj) {
+	    document.getElementById("demo").innerHTML += myObj[x] + "<br>";
+	}
+	```
+
+- 嵌套 JSON 对象
+
+  JSON 对象中可以包含另外一个 JSON 对象
+
+  ```javascript
+  myObj = {
+      "name":"runoob",
+      "alexa":10000,
+      "sites": {
+          "site1":"www.runoob.com",
+          "site2":"m.runoob.com",
+          "site3":"c.runoob.com"
+      }
+  }
+  //可以使用点号(.)或者中括号([])来访问嵌套的 JSON 对象
+  x = myObj.sites.site1;
+  // 或者
+  x = myObj.sites["site1"];
+  ```
+
+- 删除对象属性
+
+	可以使用 delete 关键字来删除 JSON 对象的属性
+	
+	```javascript
+	delete myObj.sites.site1;
+	//或者
+	delete myObj.sites["site1"]
+	```
+
+**5）JSON 数组**
+
+JSON 数组保存在中括号内，JSON 中数组值必须是合法的 JSON 数据类型。
+
+- 对象属性的值可以是一个数组
+
+	```javascript
+	{
+	    "name":"网站",
+	    "num":3,
+	    "sites":[ "Google", "Runoob", "Taobao" ]
+	}
+	```
+
+- 可以使用索引值来访问数组
+
+	```javascript
+	x = myObj.sites[0];
+	```
+
+- 可以使用循环来访问数组
+
+	```javascript
+	//for-in循环
+	for (i in myObj.sites) {
+	    x += myObj.sites[i] + "<br>";
+	}
+	//for循环
+	for (i = 0; i < myObj.sites.length; i++) {
+	    x += myObj.sites[i] + "<br>";
+	}
+	```
+
+- 数组可以包含对象
+
+	```javascript
+	"sites":[
+	    {"name":"Runoob", "url":"www.runoob.com"}, 
+	    {"name":"Google", "url":"www.google.com"},
+	    {"name":"Taobao", "url":"www.taobao.com"}
+	]
+	```
+
+**6）JSON 字符串转换为 JavaScript 对象**
+
+`JSON.parse()`         将一个 JSON 字符串转换为 JavaScript 对象。
+
+`JSON.stringify()`    将 JavaScript 值转换为 JSON 字符串。
+
+**7）JSON 使用 JavaScript 语法**
+
+因为 JSON 使用 JavaScript 语法，所以无需额外的软件就能处理 JavaScript 中的 JSON
+
+```javascript
+var sites = [
+    { "name":"runoob" , "url":"www.runoob.com" }, 
+    { "name":"google" , "url":"www.google.com" }, 
+    { "name":"微博" , "url":"www.weibo.com" }
+];
+sites[0].name; //返回runoob
+sites[0].name="菜鸟教程"; //修改数据
+```
 
 ## DOM
 
+DOM (Document Object Model) 译为文档对象模型，是 HTML 和 XML 文档的编程接口
+
+文档对象模型 （DOM） 是中立于平台和语言的接口，它允许程序和脚本动态地访问和更新文档的内容、结构和样式。
+
+HTML DOM是针对HTML 的标准对象模型，是HTML 的标准编程接口，定义了访问和操作 HTML 文档的标准方法。
+
+HTML DOM 定义了所有 HTML 元素的对象和属性，以及访问它们的方法。换言之，HTML DOM 是关于如何获取、修改、添加或删除 HTML 元素的标准
+
+DOM 以树结构表达 HTML 文档
+
+![](https://oss.mingever.com/note/JavaScript/htmltree.gif)
+
+**1）HTML DOM编程接口**
+
+可通过 JavaScript （以及其他编程语言）对 HTML DOM 进行访问，所有 HTML 元素被定义为对象
+
+- DOM方法是我们可以在节点（HTML 元素）上执行的动作
+
+	`getElementById()`：返回带有指定 ID 的元素
+
+- DOM属性是我们可以在节点（HTML 元素）设置和修改的值
+
+	`innerHTML`：节点（元素）的文本值
+
+**2）改变HTML**
+
+- 改变HTML输出流
+
+	`document.write()` 可用于直接向 HTML 输出流写内容
+
+	```html
+	<script>
+	    document.write(Date());
+	</script>
+	```
+
+- 改变 HTML 内容
+
+	使用 `innerHTML` 属性
+
+	`document.getElementById(id).innerHTML=新的HTML`
+
+- 改变 HTML 属性
+
+	`document.getElementById(id).attribute=新属性值`
+
+	```html
+	<img id="image" src="smiley.gif">
+	
+	<script>
+	document.getElementById("image").src="landscape.jpg";
+	</script>
+	```
+
+**3）改变CSS**
+
+HTML DOM 允许 JavaScript 改变 HTML 元素的样式
+
+`document.getElementById(id).style.property=新样式`
+
+```html
+<script>
+    document.getElementById("p2").style.color="blue";
+    document.getElementById("p2").style.fontFamily="Arial";
+    document.getElementById("p2").style.fontSize="larger";
+</script>
+
+<p id="p1">Hello World!</p>
+<p id="p2">Hello World!</p>
+```
+
+**4）DOM事件**
+
+HTML DOM 使 JavaScript 有能力对 HTML 事件做出反应
+
+- 向HTML元素分配事件
+
+	- 使用事件属性
+
+		```html
+		<button onclick="displayDate()">点这里</button>
+		```
+
+	- 使用HTML DOM
+
+		``` html
+		<script>
+		    document.getElementById("myBtn").onclick=function(){displayDate()};
+		    function displayDate(){
+		        document.getElementById("demo").innerHTML=Date();
+		    }
+		</script>
+		
+		<p>点击按钮执行 <em>displayDate()</em> 函数.</p>
+		<button id="myBtn">点这里</button>
+		```
+
+- 事件
+
+	| **鼠标事件**                                                 | **键盘事件**                                                 | **表单事件**                                              | **文档/窗口事件**                                         |
+	| ------------------------------------------------------------ | ------------------------------------------------------------ | --------------------------------------------------------- | --------------------------------------------------------- |
+	| [click](https://www.runoob.com/jquery/event-click.html)      | [keypress](https://www.runoob.com/jquery/event-keypress.html) | [submit](https://www.runoob.com/jquery/event-submit.html) | [load](https://www.runoob.com/jquery/event-load.html)     |
+	| [dblclick](https://www.runoob.com/jquery/event-dblclick.html) | [keydown](https://www.runoob.com/jquery/event-keydown.html)  | [change](https://www.runoob.com/jquery/event-change.html) | [resize](https://www.runoob.com/jquery/event-resize.html) |
+	| [mouseenter](https://www.runoob.com/jquery/event-mouseenter.html) | [keyup](https://www.runoob.com/jquery/event-keyup.html)      | [focus](https://www.runoob.com/jquery/event-focus.html)   | [scroll](https://www.runoob.com/jquery/event-scroll.html) |
+	| [mouseleave](https://www.runoob.com/jquery/event-mouseleave.html) |                                                              | [blur](https://www.runoob.com/jquery/event-blur.html)     | [unload](https://www.runoob.com/jquery/event-unload.html) |
+	| [hover](https://www.runoob.com/jquery/event-hover.html)      |                                                              |                                                           |                                                           |
+
+	- onload和onunload
+
+		会在用户进入或离开页面时被触发
+
+		可用于检测访问者的浏览器类型和浏览器版本，并基于这些信息来加载网页的正确版本
+
+		可用于处理 cookie，\<body onload="checkCookies()">
+
+	- onchange
+
+		常结合对输入字段的验证来使用
+
+		```html
+		<script>
+		    function myFunction(){
+		        var x=document.getElementById("fname");
+		        x.value=x.value.toUpperCase();
+		    }
+		</script>
+		
+		<body>
+		    输入你的名字: <input type="text" id="fname" onchange="myFunction()">
+		    <p>当你离开输入框后，函数将被触发，将小写字母转为大写字母。</p>
+		</body>
+		```
+
+	- onmouseover 和 onmouseout
+
+		可用于在用户的鼠标移至 HTML 元素上方或移出元素时触发函数
+
+		```html
+		<script>
+		    function mOver(obj){
+		        obj.innerHTML="Thank You"
+		    }
+		    function mOut(obj){
+		        obj.innerHTML="Mouse Over Me"
+		    }
+		</script>
+		
+		<div onmouseover="mOver(this)" onmouseout="mOut(this)" style="background-color:#D94A38;width:120px;height:20px;padding:40px;">Mouse Over Me
+		</div>
+		```
+
+	- onmousedown，onmouseup，onclick
+
+		点击鼠标按钮时，会触发 onmousedown 事件
+		当释放鼠标按钮时，会触发 onmouseup 事件
+		最后，当完成鼠标点击时，会触发 onclick 事件
+
+	- onfocus
+
+		输入框获取焦点时
+
+**5）HTML DOM EventListener**
+
+addEventListener() 方法：用于向指定元素添加事件句柄
+
+添加的事件句柄不会覆盖已存在的事件句柄
+
+可以向一个元素添加多个事件句柄
+
+可以向同个元素添加多个同类型的事件句柄，如两个click事件
+
+可以向任何 DOM 对象添加事件监听
+
+可以使用 removeEventListener() 方法来移除事件的监听
+
+``` html
+<script>
+    document.getElementById("myBtn").addEventListener("click", displayDate);
+    function displayDate() {
+        document.getElementById("demo").innerHTML = Date();
+    }
+</script>
+```
+
+**6）HTML DOM 元素 (节点)**
+
+- 创建新的 HTML 元素
+
+	`appendChild()`，需要先创建一个元素，然后在已存在的元素中添加它
+
+	```html
+	<script>
+	    var para = document.createElement("p");
+	    var node = document.createTextNode("这是一个新的段落。");
+	    para.appendChild(node);
+	
+	    var element = document.getElementById("div1");
+	    element.appendChild(para);
+	</script>
+	```
+
+- 移除一个元素
+
+	`removeChild()`，要移除一个元素，你需要知道该元素的父元素
+
+	```html
+	<script>
+	    var parent = document.getElementById("div1");
+	    var child = document.getElementById("p1");
+	    parent.removeChild(child);
+	</script>
+	```
+
+- 替换 HTML 元素
+
+	`replaceChild()`
+
+	```html
+	<script> 
+	    var parent = document.getElementById("div1");
+	    var child = document.getElementById("p1");
+	    parent.replaceChild(para, child);
+	</script>
+	```
+
 ## BOM
 
+浏览器对象模型 (BOM)：使JavaScript有能力与浏览器对话
+
+**1）Window对象**
+
+- 所有浏览器都支持window对象，它表示浏览器窗口
+
+	所有 JavaScript 全局对象、函数以及变量均自动成为 window 对象的成员
+
+	全局变量是 window 对象的属性，全局函数是 window 对象的方法，甚至 HTML DOM 的 document 也是window对象的属性之一
+
+	```javascript
+	window.open() - 打开新窗口
+	window.close() - 关闭当前窗口
+	window.moveTo() - 移动当前窗口
+	window.resizeTo() - 调整当前窗口的尺寸
+	```
+
+- window.location对象
+
+	在编写时可不使用 window 这个前缀
+
+	```javascript
+	location.href                     属性返回当前页面的 URL 
+	location.hostname            返回 web 主机的域名
+	location.pathname            返回当前页面的路径和文件名
+	location.port                     返回web 主机的端口 （80 或 443）
+	location.protocol              返回所使用的 web 协议（http: 或 https:）
+	```
+
+- Window Navigator
+
+	```html
+	<script>
+	    txt = "<p>浏览器代号: " + navigator.appCodeName + "</p>";
+	    txt+= "<p>浏览器名称: " + navigator.appName + "</p>";
+	    txt+= "<p>浏览器版本: " + navigator.appVersion + "</p>";
+	    txt+= "<p>启用Cookies: " + navigator.cookieEnabled + "</p>";
+	    txt+= "<p>硬件平台: " + navigator.platform + "</p>";
+	    txt+= "<p>用户代理: " + navigator.userAgent + "</p>";
+	    txt+= "<p>用户代理语言: " + navigator.language + "</p>";
+	    document.getElementById("example").innerHTML=txt;
+	</script>
+	```
+
+**2）JS弹窗**
+
+可以省略window
+
+- 警告框
+
+	`window.alert("sometext");`
+
+- 确认框
+
+	`window.confirm("sometext");`
+
+- 提示框
+
+	`window.prompt("sometext","defaultvalue");`
+
+	如果用户点击确认，那么返回值为输入的值。如果用户点击取消，那么返回值为 null
+
+	```javascript
+	var person = prompt("请输入你的名字", "Harry Potter");
+	if (person != null && person != "") {
+	    x = "你好 " + person + "! 今天感觉如何?";
+	    document.getElementById("example").innerHTML = x;
+	}
+	```
+
+**3）JS计时事件**
+
+在一个设定的时间间隔之后来执行代码，而不是在函数被调用后立即执行
+
+setInterval() 和 setTimeout()是 HTML DOM Window对象的两个方法，window可省略
+
+- `setInterval()`
+
+	间隔指定的毫秒数不停地执行指定的代码。第一个参数是含有 JavaScript 语句的字符串，或是对函数的调用。第二个参数间隔的毫秒数。
+
+	- 语法：window.setInterval(function(){…},milliseconds);
+
+		```html
+		<script>
+		        var myVar = setInterval(function () { myTimer() }, 1000);
+		        function myTimer() {
+		            var d = new Date();
+		            var t = d.toLocaleTimeString();
+		            document.getElementById("demo").innerHTML = t;
+		        }
+		</script>
+		<body>
+		    <p>在页面显示一个时钟</p>
+		    <p id="demo"></p>
+		</body>
+		```
+
+	- `clearInterval()` 用于停止 setInterval()方法执行的函数代码
+
+- `setTimeout()`
+
+	在指定的毫秒数后执行指定代码。和setInterval()用法一样
+
+	- 语法：window.setTimeout("javascript function", milliseconds);
+	- `clearTimeout()` 方法用于停止执行setTimeout()方法的函数代码
+
+	```html
+	<script>
+	    var myVar;
+	    function myFunction(){
+	        myVar=setTimeout(function(){alert("Hello")},3000);
+	    }
+	    function myStopFunction(){
+	        clearTimeout(myVar);
+	    }
+	</script>
+	<p>点击第一个按钮等待3秒后出现"Hello"弹框。</p>
+	<p>点击第二个按钮来阻止第一个函数运行。（你必须在3秒之前点击它）。</p>
+	<button onclick="myFunction()">点我</button>
+	<button onclick="myStopFunction()">停止弹框</button>
+	```
+
+**5）JS Cookie**
+
+- 创建Cookie
+
+	`document.cookie="username=John Doe";`
+
+	还可以为 cookie 添加一个过期时间
+
+	document.cookie="username=John Doe; expires=Thu, 18 Dec 2043 12:00:00 GMT";
+
+- 读取 Cookie
+
+	document.cookie将以字符串的方式返回所有的cookie
+	类型格式： cookie1=value; cookie2=value; cookie3=value;
+
+	var x = document.cookie;
+
+- 修改 Cookie
+
+	修改 cookie 类似于创建 cookie，旧的 cookie 将被覆盖
+
+	document.cookie="username=John Smith";
+
+- 删除 Cookie：可以设置过期事件为以前的时间
+
+```html
+<script>
+function setCookie(cname,cvalue,exdays){
+    var d = new Date();
+    d.setTime(d.getTime()+(exdays*24*60*60*1000));
+    var expires = "expires="+d.toGMTString();
+    document.cookie = cname+"="+cvalue+"; "+expires;
+}
+function getCookie(cname){
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i].trim();
+        if (c.indexOf(name)==0) { return c.substring(name.length,c.length); }
+    }
+    return "";
+}
+function checkCookie(){
+    var user=getCookie("username");
+    if (user!=""){
+        alert("欢迎 " + user + " 再次访问");
+    }
+    else {
+        user = prompt("请输入你的名字:","");
+           if (user!="" && user!=null){
+               setCookie("username",user,30);
+        }
+    }
+}
+      </script>
+
+<body onload="checkCookie()"></body>
+```
+
 ## JS模块
+
+将 JavaScript 程序拆分为可按需导入的单独模块的机制
+
+**1）导出模块 export**
+
+在创建JavaScript模块时，export 语句用于从模块中导出实时绑定的函数、对象或原始值，以便其他程序可以通过 import 语句使用它们
+
+在使用import进行导入时，这些绑定值只能被导入模块所读取
+
+```javascript
+export var firstName = 'Michael';
+export var lastName = 'Jackson';
+export var year = 1958;
+//或者
+var firstName = 'Michael';
+var lastName = 'Jackson';
+var year = 1958;
+
+export {firstName, lastName, year};
+//导出函数或类
+export function multiply(x, y) {
+  return x * y;
+};
+```
+
+- export
+
+	命名导出（每个模块包含任意数量），对外输出了指定名字的变量
+
+	- import命令接受一对大括号，里面指定要从其他模块导入的变量名。大括号里面的变量名，必须与被导入模块（profile.js）对外接口的名称相同。
+
+	- 如果想为输入的变量重新取一个名字，import命令要使用as关键字，将输入的变量重命名。
+		`import { lastName as surname } from './profile.js';`
+
+- export default
+
+	默认导出（每个模块包含一个），为模块指定默认输出
+
+	- 使用import命令的时候，用户需要知道所要加载的变量名或函数名，否则无法加载。
+		为了方便，就要用到export default命令，为模块指定默认输出
+
+		```javascript
+		// export-default.js
+		export default function () {
+		 	console.log('foo');
+		}
+		```
+
+	- 其他模块加载该模块时，import命令可以为该匿名函数指定任意名字
+
+		``import customName from './export-default.js';``
+
+**2）导入模块 import**
+
+``` javascript
+//   say.js
+function sayHi(user) {
+  alert(`Hello, ${user}!`);
+}
+function sayBye(user) {
+  alert(`Bye, ${user}!`);
+}
+export {sayHi, sayBye}; // 导出变量列表
+```
+
+- 导入所有 `import *`
+
+	- 通常
+
+		``` javascript
+		//   main.js
+		import {sayHi, sayBye} from './say.js';
+		sayHi('John'); // Hello, John!
+		sayBye('John'); // Bye, John!
+		```
+
+	- 如果列表很长，可以使用 import * as \<obj> 导入所有内容
+
+		```javascript
+		//   main.js
+		import * as say from './say.js';
+		say.sayHi('John');
+		say.sayBye('John');
+		```
+
+	- 通常我们要要明确列出我们需要导入的内容，因为现在的构建工具（如webpack）把模块打包到一起，然后对其进行优化以获得更快的加载速度，并且还会删除无用的代码。
+
+- 导入为` import as`
+
+	我们也可以使用 as 让导入具有不同的名字。
+
+	``` javascript
+	//   main.js
+	import {sayHi as hi, sayBye as bye} from './say.js';
+	hi('John'); // Hello, John!
+	bye('John'); // Bye, John!
+	```
 
 ## jQuery
 
