@@ -75,7 +75,7 @@ java软件开发工具包，包括：
 4. System中的常用方法
 	- `System.arraycopy()`：复制数组
 	- gc：垃圾回收器，自动调用
-	- exit(int i)：退出虚拟机，非0表示异常终止，0表示终止，如System.exit(0);退出程序。即该方法永远不会正常返回，唯一一个退出程序而不执行finally
+	- exit(int i)：退出虚拟机，非0表示异常终止，0表示终止，如System.exit(0);退出程序。即该方法永远不会正常返回，唯一一个退出程序而不执行finally。
 
 #### Scanner类
 
