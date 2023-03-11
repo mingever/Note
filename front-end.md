@@ -2903,27 +2903,22 @@ addEventListener() 方法：用于向指定元素添加事件句柄
 
 可以省略window
 
-- 警告框
+- 警告框`window.alert("sometext");`
 
-	`window.alert("sometext");`
+- 确认框`window.confirm("sometext");`
 
-- 确认框
+- 提示框`window.prompt("sometext","defaultvalue");`
 
-	`window.confirm("sometext");`
 
-- 提示框
+如果用户点击确认，那么返回值为输入的值。如果用户点击取消，那么返回值为 null
 
-	`window.prompt("sometext","defaultvalue");`
-
-	如果用户点击确认，那么返回值为输入的值。如果用户点击取消，那么返回值为 null
-
-	```javascript
-	var person = prompt("请输入你的名字", "Harry Potter");
-	if (person != null && person != "") {
-	    x = "你好 " + person + "! 今天感觉如何?";
-	    document.getElementById("example").innerHTML = x;
-	}
-	```
+```javascript
+var person = prompt("请输入你的名字", "Harry Potter");
+if (person != null && person != "") {
+    x = "你好 " + person + "! 今天感觉如何?";
+    document.getElementById("example").innerHTML = x;
+}
+```
 
 **3）JS计时事件**
 
@@ -3137,15 +3132,495 @@ export {sayHi, sayBye}; // 导出变量列表
 
 ## jQuery
 
+jQuery是一个 JavaScript函数库
+
+jQuery极大地简化了 JavaScript 编程
+
+jQuery包含以下功能：HTML 元素选取，HTML 元素操作，CSS 操作，HTML 事件函数，JavaScript 特效和动画，HTML DOM 遍历和修改，AJAX，Utilities
+
+**1）添加jQuery**
+
+- 从 jquery.com下载 jQuery 库，并引入到HTML中
+
+	```html
+	<script src="jquery-1.10.2.min.js"></script>
+	```
+
+- 从CDN 中载入 jQuery，如百度CDN
+
+	```html
+	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js">
+	```
+
+**2）语法**
+
+jQuery语法是通过选取 HTML 元素，并对选取的元素执行某些操作
+
+- 基础语法：`$(selector).action()`
+
+	- 美元符号定义 jQuery
+
+	- 选择符（selector）"查询"和"查找" HTML 元素
+
+	- jQuery 的 action() 执行对元素的操作
+
+		```javascript
+		$(this).hide() - 隐藏当前元素
+		$("p").hide() - 隐藏所有 <p> 元素
+		$("p.test").hide() - 隐藏所有 class="test" 的 <p> 元素
+		$("#test").hide() - 隐藏 id="test" 的元素
+		```
+
+	- 文档就绪事件
+
+		防止文档在完全加载之前运行 jQuery 代码，即在 DOM 加载完成后才可以对 DOM 进行操作。
+
+		作用是希望在页面加载完，自动执行定义js代码
+		用来取代页面中的window.onload
+
+		```javascript
+		$(document).ready(function(){
+		      // 开始写 jQuery 代码...
+		});
+		
+		//简写：
+		$(function(){
+		   // 开始写 jQuery 代码...
+		});
+		```
+
+- 选择器
+
+	jQuery选择器允许您对 HTML 元素组或单个元素进行操作
+
+	jQuery 选择器基于元素的 id、类、类型、属性、属性值等"查找"（或选择）HTML 元素
+
+	它基于已经存在的 CSS 选择器，除此之外，它还有一些自定义的选择器
+
+	jQuery 中所有选择器都以美元符号开头：$()
+
+	- 元素选择器：基于元素名选取元素
+
+		```html
+		<!--
+		$("p")，在页面中选取所有 <p> 元素
+		用户点击按钮后，所有 <p> 元素都隐藏
+		-->
+		<script>
+		    $(document).ready(function(){
+		       $("button").click(function(){
+		           $("p").hide();
+		        });
+		    });
+		</script>
+		```
+
+	- \#id 选择器：通过 HTML 元素的 id 属性选取指定的元素
+
+		```html
+		$("#test")
+		```
+
+	- .class 选择器：jQuery 类选择器可以通过指定的 class 查找元素
+
+		```html
+		$(".test")
+		$("*")	        选取所有元素	在线实例
+		$(this)	        选取当前 HTML 元素	在线实例
+		$("p.intro")	选取 class 为 intro 的 <p> 元素	在线实例
+		$("p:first")	选取第一个 <p> 元素
+		```
+
+**2）jQuery事件**
+
+jQuery 是为事件处理特别设计的
+
+- 语法
+
+	在 jQuery 中，大多数 DOM 事件都有一个等效的 jQuery 方法
+
+	- 页面中指定一个点击事件
+
+		`$("p").click();`
+
+	- 定义了点击后触发事件，可以通过一个事件函数实现
+
+		```javascript
+		$("p").click(function(){
+		    // 动作触发后执行的代码!!
+		});
+		```
+
+- 事件
+
+	- $(document).ready()：允许我们在文档完全加载完后执行函数
+
+	- click()
+
+	- dblclick()：双击元素时，会发生     dblclick 事件
+
+	- mouseenter()：当鼠标指针穿过元素时，会发生 mouseenter 事件
+
+		```html
+		<script>
+		   $(document).ready(function(){
+		     $("#p1").mouseenter(function(){
+		       alert('您的鼠标移到了 id="p1" 的元素上!');
+		     });
+		   });
+		</script>
+		<p id="p1">鼠标指针进入此处，会看到弹窗。</p>
+		```
+
+	- hover()：hover()方法用于模拟光标悬停事件
+
+	- focus()：当元素获得焦点时，发生 focus 事件
+
+	- blur()：当元素失去焦点时，发生 blur 事件
+
+**3）jQuery效果**
+
+- 隐藏和显示：hide()，show()
+
+	``` html
+	<script>
+	   $(document).ready(function(){
+	      $("p").click(function(){
+	         $(this).hide();
+	      });
+	  });
+	</script>
+	<body>
+	   <p>如果你点我，我就会消失。</p>
+	   <p>继续点我!</p>
+	</body>
+	```
+
+- 淡入淡出
+
+- 滑动
+
+- 动画
+
+**4）jQuery HTML**
+
+jQuery 拥有可操作 HTML 元素和属性的强大方法，即jQuery操作DOM
+
+- 获取内容
+
+	```javascript
+	text()    设置或返回所选元素的文本内容  $("p").text("Hello world!");
+	html()    设置或返回所选元素的内容（包括 HTML 标记）
+	val()     设置或返回表单字段的值
+	```
+
+	
+
+- 添加yuas
+
+	```javascript
+	append()     在被选元素的结尾插入内容
+	prepend()    在被选元素的开头插入内容
+	after()      在被选元素之后插入内容
+	before()     在被选元素之前插入内容
+	```
+
+- 删除元素
+
+	```javascript
+	remove()     删除被选元素（及其子元素）
+	empty()      从被选元素中删除子元素
+	```
+
+	
+
 ## Ajax
 
+Asynchronous JavaScript and XML(异步的 JavaScript 和 XML)
 
+通过在后台与服务器进行少量数据交换，AJAX 可以使网页实现异步更新，是一种在无需重新加载整个网页的情况下，能够更新部分网页的技术
 
+AJAX 不是新的编程语言，而是一种使用现有标准的新方法，是一种思想
 
+AJAX 不需要任何浏览器插件，但需要用户允许JavaScript在浏览器上执行
 
+<img src="https://oss.mingever.com/note/JavaScript/ajax-yl.png" style="zoom:80%;" />
 
+```html
+<script>
+function loadXMLDoc()
+{
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {
+        //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+        xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {
+        // IE6, IE5 浏览器执行代码
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+        }
+    }
+    xmlhttp.open("GET","/try/ajax/ajax_info.txt",true);
+    xmlhttp.send();
+}
+</script>
+</head>
+<body>
 
+<div id="myDiv"><h2>使用 AJAX 修改该文本内容</h2></div>
+<button type="button" onclick="loadXMLDoc()">修改内容</button>
 
+</body>
+```
+
+**1）AJAX基于现有的Internet标准，并且联合使用它们**
+
+XMLHttpRequest 对象 (异步的与服务器交换数据)
+
+JavaScript/DOM (信息显示/交互)
+
+CSS (给数据定义样式)
+
+XML (作为转换数据的格式)
+
+**2）XMLHttpRequest 对象**
+
+是aJax的基础，用于在后台与服务器交换数据
+
+- 创建
+
+	所有现代浏览器均内建 XMLHttpRequest 对象。
+
+	`variable=new XMLHttpRequest();`
+
+- 向服务器发送请求
+
+	使用 XMLHttpRequest 对象的 `open()` 和 `send()` 方法
+
+	- open(method,url,async)：规定请求的类型、URL 以及是否异步处理请求
+
+		method：请求的类型；GET 或 POST
+
+		url：文件在服务器上的位置
+
+		async：true（异步）或 false（同步）
+
+		> MLHttpRequest 对象如果要用于 AJAX 的话，其 open() 方法的 async 参数必须设置为 true，通过 AJAX的异步处理，JavaScript 无需等待服务器的响应，而是在等待服务器响应时执行其他脚本；当响应就绪后对响应进行处理
+
+	- send(string)：将请求发送到服务器
+
+		string：仅用于 POST 请求
+
+	- setRequestHeader(header,value)：向请求添加 HTTP 头
+
+		header: 规定头的名称
+
+		value: 规定头的值
+
+	```javascript
+	//1) get请求
+	xmlhttp.open("GET","/try/ajax/demo_get.php",true);
+	xmlhttp.send();
+	//2) 在上面的例子中，您可能得到的是缓存的结果，为了避免这种情况，请向 URL 添加一个唯一的 ID
+	xmlhttp.open("GET","/try/ajax/demo_get.php?t=" + Math.random(),true);
+	xmlhttp.send();
+	//3) 如果希望通过 GET 方法发送信息，请向 URL 添加信息
+	xmlhttp.open("GET","/try/ajax/demo_get2.php?fname=Henry&lname=Ford",true);
+	xmlhttp.send();
+	//4) POST 请求
+	xmlhttp.open("POST","/try/ajax/demo_post.php",true);
+	xmlhttp.send();
+	//5) 如果需要像 HTML 表单那样 POST 数据，要使用 setRequestHeader() 来添加 HTTP 头。然后在 send() 方法中规定希望发送的数据：
+	xmlhttp.open("POST","/try/ajax/demo_post2.php",true);
+	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	xmlhttp.send("fname=Henry&lname=Ford");
+	```
+
+- 服务器响应
+
+	XMLHttpRequest 对象的 `responseText` 或 `responseXML` 属性。
+
+	- responseText
+
+		获得字符串形式的响应数据document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+
+	- responseXML
+
+		获得 XML 形式的响应数据
+
+- onreadystatechange事件
+
+	当请求被发送到服务器时，需要执行一些基于响应的任务
+
+	每当 readyState 改变时，就会触发 onreadystatechange 事件，我们规定当服务器响应已做好被处理的准备时所执行的任务。
+
+	- readyState 属性存有 XMLHttpRequest 的状态信息，当 readyState 等于 4 且状态为 200 时，表示响应已就绪
+
+		- onreadystatechange：存储函数（或函数名），每当 readyState 属性改变时，就会调用该函数
+
+		- readyState：存有XMLHttpRequest     的状态，从 0 到 4 发生变化。
+
+			0: 请求未初始化
+
+			1: 服务器连接已建立
+
+			2: 请求已接收
+
+			3: 请求处理中
+
+			4: 请求已完成，且响应已就绪
+
+		- status
+
+			200: "OK"
+
+			404: 未找到页面
+
+	- 回调函数：回调函数是一种以参数形式传递给另一个函数的函数
+
+**3）jQuery-AJAX**
+
+jQuery 提供多个与 AJAX 有关的方法。通过 jQuery AJAX     方法，能够使用 HTTP Get 和 HTTP Post 从远程服务器上请求文本、HTML、XML 或 JSON，同时能够把这些外部数据直接载入网页的被选元素中。
+
+- load() 方法
+
+	是简单但强大的 AJAX 方法，从服务器加载数据，并把返回的数据放入被选元素中
+	它几乎与 $.get(url, data, success) 等价，不同的是它不是全局函数，并且它拥有隐式的回调函数
+
+	```javascript
+	//语法
+	$(selector).load(URL,data,function(response,status,xhr));
+	//如
+	$("#result").load("ajax/test.html");
+	
+	/*
+	url：必选，规定希望加载的 URL
+	data：可选，规定与请求一同发送的查询字符串键/值对集合，即相当于post提交参数
+	function(response,status,xhr)：可选，是 load() 方法完成后所执行的函数名称。
+		response：包含来自请求的结果数据
+	    status：包含请求的状态（"success", "notmodified", "error", "timeout" 或 "parsererror"）
+	    xhr：包含 XMLHttpRequest 对象
+	*/
+	```
+
+- get() 和 post() 方法
+
+	- $.get(URL,callback)
+
+		通过GET请求从服务器上请求数据。
+
+		URL 参数规定希望请求的 URL，可选的 callback 参数是请求成功后所执行的函数名
+
+		```javascript
+		    $("button").click(function(){
+		      $.get("demo_test.php",function(data,status){
+		        alert("数据: " + data + "\n状态: " + status);
+		      });
+		    });
+		```
+
+	- $.post(URL,data,callback)
+
+		通过POST请求向服务器提交数据。
+
+		必需的 URL 参数规定希望请求的 URL。
+		可选的 data 参数规定连同请求发送的数据，即相当于post提交参数
+		可选的 callback 参数是请求成功后所执行的函数名。
+
+		```javascript
+		$("button").click(function(){
+		    $.post("/try/ajax/demo_test_post.php",
+		    {
+		        name:"菜鸟教程",
+		        url:"http://www.runoob.com"
+		    },
+		    function(data,status){
+		        alert("数据: \n" + data + "\n状态: " + status);
+		    });
+		});
+		```
+
+- $ajax()
+
+	- 通过 HTTP 请求加载远程数据，
+	- 该方法是 jQuery 底层 AJAX 实现，其高层实现方法有 $.get, $.post 
+	- $.ajax() 返回其创建的 XMLHttpRequest 对象
+		- url：String类型的参数，规定发送请求的地址，默认为当前页地址。
+		- type：String类型的参数，规定请求方式（post或get）默认为get。
+		- data：Object或String类型的参数，规定发送到服务器的数据。如果已经不是字符串，将自动转换为字符串格式
+		- dataType：String类型的参数，预期服务器返回的数据类型。如xml，html，json，script，text
+		- success：Function类型的参数，请求成功后调用的回调函数，有两个参数。
+
+- $.each()函数
+
+	不同于JQuery对象的each()方法，它是一个全局函数，不操作JQuery对象，而是以一个数组或者对象作为第1个参数，以一个回调函数作为第2个参数。回调函数拥有两个参数：第1个为对象的成员或数组的索引，第2个为对应变量或内容
+
+	```javascript
+	//eg1：
+	$(function () {
+	    $("button").click(function () {
+	            //alert("button click");
+	            $.ajax({
+	                //url:"returnVoid-ajax.do",
+	                //url:"returnStudentJson.do",
+	                url:"returnStudentJsonArray.do",
+	                data:{
+	                    name:"zhangsan",
+	                    age:20
+	                },
+	                type:"post",
+	                dataType:"json",
+	                success:function (resp) {
+	                    //resp从服务器返回的是json格式的字符串 {"name":"zhangsan","age":20}
+	                    //jquery会把字符串转为json对象，赋值给resp形参
+	                    //alert(resp.name+"  "+resp.age);
+	                    $.each(resp,function (i,n) {
+	                        alert(n.name+"  "+n.age);
+	                    })
+	                }
+	            })
+	        }
+	    )
+	})
+	
+	//eg2：
+	$(function () {
+	        //在当前页面dom对象加载后，执行loadStudentData()
+	        loadStudentData()
+	        $("#btnLoader").click(function () {
+	            loadStudentData()
+	        })
+	    })
+	
+	    function loadStudentData() {
+	        $.ajax({
+	            url:"student/queryStudent.do",
+	            type:"get",
+	            dataType:"json",
+	            success:function (data) {
+	                //清除旧的数据
+	                $("#info").html("");
+	                $.each(data,function(i,n){
+	                    $("#info").append("<tr>")
+	                        .append("<td>"+n.id+"</td>")
+	                        .append("<td>"+n.name+"</td>")
+	                        .append("<td>"+n.age+"</td>")
+	                        .append("</tr>")
+	                })
+	            }
+	        })
+	    }
+	```
+
+	
 
 # Vue3
 
