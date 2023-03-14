@@ -51,12 +51,12 @@ java软件开发工具包，包括：
 
 #### lang包
 
-1. java.lang.*; 包是默认导入的，不需要手动import
+java.lang.*; 包是默认导入的，不需要手动import
 
-2. 是java语言的核心，提供了java中的基础类
-	- 类型：Object类，Class类，String类，基本类型，包装类
-	- 工具：数学类Math；安全；注解Override
-	- 系统：Syetem类；进程；线程Thread；运行Runnable；堆栈；异常Throwable类
+是java语言的核心，提供了java中的基础类
+- 类型：Object类，Class类，String类，基本类型，包装类
+- 工具：数学类Math；安全；注解Override
+- 系统：Syetem类；进程；线程Thread；运行Runnable；堆栈；异常Throwable类
 
 #### System类
 
@@ -97,31 +97,30 @@ java软件开发工具包，包括：
 
 #### 随机数
 
-1. **Random类**
+**1）Random类**
 
-	- `int i = random.nexInt();` 随机生成一个int整数，范围在 -2^31~2^31-1
-		
-	- `int i = random.nexInt(n);` 获取[0,n)之间的int整数
-		
-	- `int i = random.nextInt(m-n+1)+n;` 生成[n,m]之间的随机整数
-
-		```java
-		Random random = new Random();
-		
-		int i = random.nexInt(101);           获取[0,100]之间的整数
-		int i = random.nextInt(26)+65;        获取[65,90]之间的整数
-		```
-
-
-2. **Math.random()方法**
-
-	- 返回值为double类型，范围在[0.0-1.0)
-		
-	- `int i = (int)(Math.random()*(m-n+1)+n)`：生成[n,m]之间的随机整
+- `int i = random.nexInt();` 随机生成一个int整数，范围在 -2^31~2^31-1
 	
-		```java
-		int i = (int)(Math.random()*100+1);     //生成[1,100]之间的随机整数
-		```
+- `int i = random.nexInt(n);` 获取[0,n)之间的int整数
+	
+- `int i = random.nextInt(m-n+1)+n;` 生成[n,m]之间的随机整数
+
+	```java
+	Random random = new Random();
+	
+	int i = random.nexInt(101);           获取[0,100]之间的整数
+	int i = random.nextInt(26)+65;        获取[65,90]之间的整数
+	```
+
+**2）Math.random()方法**
+
+- 返回值为double类型，范围在[0.0-1.0)
+	
+- `int i = (int)(Math.random()*(m-n+1)+n)`：生成[n,m]之间的随机整
+
+	```java
+	int i = (int)(Math.random()*100+1);     //生成[1,100]之间的随机整数
+	```
 
 
 
@@ -694,18 +693,15 @@ default:
 ### 循环结构
 
 1. 循环的要素
-
-  1. 循环条件：是一个boolean表达式，决定是否执行循环体
-
-  2. 循环体：是循环的主体，如果代码块只有一句，可以省略括号
-
+	- 循环条件：是一个boolean表达式，决定是否执行循环体
+	- 循环体：是循环的主体，如果代码块只有一句，可以省略括号
 2. 三种循环结构来完成循环控制
 
-	- for循环：对于循环次数已知的循环
+  - for循环：对于循环次数已知的循环
 
-	- while循环：控制循环次数未知的循环
+  - while循环：控制循环次数未知的循环
 
-	- do-while循环：用来完成至少需要一次的循环
+  - do-while循环：用来完成至少需要一次的循环
 
 #### while循环
 
@@ -1975,4 +1971,868 @@ java允许将一个类定义在另一个类的内部，这种语法叫做内部�
 	}
 
 
+
+## API
+
+### String
+
+String类是一个引用类型，默认值为null。
+
+==String类底层就是利用char[]来实现的，其实就是一个字符数组，就等同于char[]==
+可以为字符串中的每个字符设置一个编号，==从0开始==
+
+初始化：
+
+- `String str = "abc";`  String使用非常频繁，所以提供了这种方式来创建对象
+- `String str = new String("abc");`
+
+#### final修饰
+
+String是final修饰的
+
+所以==String类不能被继承也不能被更改==，每次使用 + 进行拼接都会创建新的对象，降低效率。
+
+要改变String类型的字符串值时，并不是把堆中内存的数据改变，而是==创建出一个新对象，然后把变量的地址引用改为新生成对象的地址==
+
+#### 字符串常量池
+
+> 常量池分类
+>
+> 1. ==静态常量池==，即*.class文件中的常量池，class文件中的常量池不仅仅包含字符串(数字)字面量，还包含类、方法的信息，占用class文件绝大部分空间。
+> 2. ==运行时常量池==，则是jvm虚拟机在完成类装载操作后，将class文件中的常量池载入到内存中，并保存在方法区中，我们常说的常量池，就是指方法区中的运行时常量池。
+> 3. ==字符串常量池跟运行时常量池在JDK1.7之后分开了==。运行时常量池一直在方法区（Method Area)，里面包含了每一个.class文件中的常量池中的内容。==而字符串池在Java 7之前保存在方法区，在Java 7之后保存在堆上。=
+> 	- 在JDK1.6及之前运行时常量池逻辑包含字符串常量池存放在方法区,     此时hotspot虚拟机对方法区的实现为永久代（位于堆内存中）
+> 	- 在JDK1.7 字符串常量池被从方法区拿到了堆中,     这里没有提到运行时常量池,也就是说==字符串常量池被单独拿到堆==,运行时常量池剩下的东西还在方法区, 也就是hotspot中的永久代
+> 	- 在==JDK1.8== hotspot==移除了永久代==用==元空间==取而代之,     这时候==字符串常量池还在堆==, ==运行时常量池还在方法区==, 只不过==方法区的实现从永久代变成了元空间==(堆外内存)
+
+在开发中，字符串的创建是比较频繁的，而字符串的分配和其他对象的分配是类似的，需要耗费大量的时间和空间，从而影响程序的运行性能，所以作为最基础最常用的引用数据类型，JVM提供了字符串常量池，==字符串常量池存在于堆内存中的一块空间==
+
+==\= "abc" 形式为字面量形式创建字符串==，会直接在常量池中创建，下次用该字符串时，会直接引用，不会再次创建，即字符串常量池中的字符串只存在一次
+
+==new String("abc")为new形式，在堆内创建新地址==。==但存储的是指向常量池的引用，他的value值指向的是常量池中的一个地址==
+
+```java
+String a = "abc";                    //在常量池中创建
+String b = "abc";                    //与a是同一份引用
+String c =new String("abc");         //在堆中创建
+String d = "ab"+"c";                 //常量池中创建，abc已存在，直接引用
+
+String e ="ab";
+String f ="c";
+String g = e + f;                    //在堆中创建对象
+
+System.out.println(a==b);//true
+System.out.println(a==c);//false
+System.out.println(a==d);//true
+System.out.println(c==d);//false
+
+System.out.println(d==g);//false
+System.out.println(a==g);//false
+System.out.println(c==g);//false
+```
+
+#### 创建了几个对象
+
+```java
+String str1 = "abc";             // 在常量池中
+String str2 = new String("abc"); // 在堆上
+```
+
+<img src="https://oss.mingever.com/note/java/StringConstantPool.jpeg" style="zoom: 33%;" />
+
+- 第一种方式：创建0个或1个
+	- 如果常量池中没有“abc”，那么在==编译期==会在字符串常量池中创建一个“abcd”字符串对象，==运行期==返回引用赋值给str1
+	- 如果常量池中已经存在了“abc”，那么不会再创建对象，直接将引用赋值给str1
+- 第二种方式：创建1个或2个
+	- 创建时，会先检索常量池中是否存在“abc”，如果不存在“abc”这个字符串，则会先在==常量池中创建==这个一个字符串。然后再执行new操作，==在堆内存中创建一个String对象==，对象的引用赋值给str2，此过程创建了2个对象
+	- 如果检索常量池时发现已经存在了对应的字符串，那么只会在==堆内==创建一个新的String对象，此过程只创建了1个对象。
+	- 如图，用new形式，虽然会在==堆内存==中创建一个对象，==但其存储的是指向常量池的引用，它们的value值均指向常量池中的同一个地址==
+	- jdk9之后，为了节省String占用jvm的内存空间，将char[] value改为了`byte[] value`
+
+#### 常用API
+
+- String其实就是一个字符数组，可以为字符串中的每个字符设置一个编号，从0开始
+- charAt()：获取字符串中的某个字符
+- length()：获取字符串的长度
+- trim()：去掉字符串两端的空白
+- toLowerCase()：转为小写
+- toUpperCase()：转为大写
+- indexOf()：查找某个字串在字符串中第一次出现的位置
+- endsWith()：是否以指定的字符串结束
+- startWith()：是否以指定的字符串开始
+- substring(int     start,int end)：截取字符串中的某一串字串，从start开始，到end结束，不包括end处字符
+- String     substring(int start)：截取从start位置开始的字符，返回一个字符串，并不是改变原来的字符串，包含start位置的字符，String元素下标从0开始
+- String concat(String str)：将指定字符串连接到此字符串的结尾，返回一个字符串，
+- toCharArry()：将字符串转换为字符数组
+- getBytes()：将为字符串转化为字节数组
+- String str = new String(byte[] b或char[] c)：将字节数组或字符数组转化为字符串
+	或 String str=String.valueOf(char[] c)
+
+#### StringBuffer和StringBuilder
+
+==两者都是可变字符串对象，可以对字符串修改而不会创建许多对象==，因此会比String效率高
+
+只能通过StringBuffer str =  new StringBuffer("demo")形式来创建对象
+
+==StringBuffer是线程安全的==，效率低；==StringBuilder是线程不安全的==，效率高
+
+方法：
+
+- append()：在末尾追加字符串
+- insert(int     index)：在位置index处插入字符串
+- delete(int     start,int end)：删除字符串中的某段字串，从start处开始，到end处结束，不删除end处字符
+- toString()：转换为字符串文本
+
+### Object
+
+可以视为==所有类的父类==，如果某个类没有明确的父类，会默认继承Object类
+
+equals和hashCode都是Object对象中的非final方法，它们设计的目的就是被用来覆盖(override)的，所以在程序设计中还是经常需要处理这两个方法。
+
+==equals()底层默认是用==实现的==
+hashcode()默认是使用内存地址(其实并不是内存)进行散列的
+
+==为true必定是同一个对象，但因为hash冲突，hashCode相等，有可能不是一个对象
+
+#### toString()
+
+是活动当前的文本描述，返回该对象的字符串表示，建议自己重写
+
+即toString()方法来输出类的信息，但默认输出的是类的地址（并不是地址值），所以要==重写，使其输出想要输出的信息==
+
+#### equals()
+
+====比较地址，equals比较值 （重写后）==
+
+- ==运算符
+
+	- 基本数据类型：byte,short,char,int,long,float,double,boolean。他们之间的比较,比较的是他们的值
+	- 引用数据类型：比较的是他们在内存中的存放地址（堆内存）
+
+- Object类中equals()源码为
+
+	```java
+	public boolean equals(Object obj) {
+	        return (this == obj);
+	 }
+	```
+
+	其底层实现为 == ，即这个方法的初始默认行为是比较对象的内存地址值，意义不大，所以在一些类库当中这个方法被重写了，如String、Integer、Date。一般都是用来比较对象的成员变量值是否相同，而不再是比较类在堆内存中的存放地址了
+
+- 用来比较两个对象是否相等，引用相等和对象相等。
+
+	比较引用值是否相等用“\==”
+	比较对象的内容是否相等用xxx.equals()方法
+
+	即，\==比较的是是不是同一个对象；equals()比较的是值是否相等；因此比较字符串时一般通过equals()方法比较
+
+#### hashCode()
+
+hashCode()一般只在散列存储结构中有用，提高检索效率
+
+1. 哈希算法
+
+	- 把任意长度的输入，变换成固定长度的输出，该输出就是哈希值也叫散列值。像 MD5、SHA1 都用的是哈希算法。
+	- 哈希函数的最常见的一个作用就是进行完整性校验，也就是说哈希可以用来代表数据本身
+	- Hash 函数拥有无限的输入空间，却只有有限的输出空间，这意味着Hash函数一定会产生碰撞
+
+2. 哈希表
+
+	- 也叫散列表，通过 Hash 算法将 Key 均匀映射到不同的位置上，是一种可以通过关键码值（key-value）直接访问的数据结构，访问单个 key 时可以达到 O(1) 的平均时间复杂度，加快访问速度。即，哈希表是能够通过给定的关键字的值直接访问到具体对应的值的一个数据结构，以空间换时间
+	- hash表实现了通过某一个码值可以直接取到数据，达到和数组一样的随机访问效果。但是数组的码值只能是下标，不具有任何意义，所以直接使用数组是不能满足需求的。那我们中间加一个函数让他实现：码值 --> 下标 --> 数据，这个就是hash函数
+
+3. hashCode()
+
+	- 是一个本地方法，hashCode()会返回==对象的散列码==，是根据对象的某些信息（可以看成是对象的内存地址，但其实不是）算出的一个int值，32位。
+
+	- 当两个对象的Hashcode一样的时候，两个对象就可能一样，但如果Hashcode不一样，那么肯定不是同一个对象，相当于先确定一个大的范围，再用equals去比较。即通过hashCode，可以==提高哈希表的检索效率和减少equals()的比较次数==。Java 中，hashCode()方法的主要作用就是为了配合哈希表使用，在==散列存储结构==中快速确定对象的存储地址，如==Hashtable、hashMap、HashSet。==
+
+	- 两个对象相等，则其hashcode一定相等；两个对象hashCode不相等，则肯定不是同一个对象；hashcode相等，并不一定是同一对象，因为会有哈希冲突
+
+	- 将元素存储在一个哈希容器中，判断元素是否相等时，先通过该元素的hashCode()来计算出其在哈希表中桶的位置(提高检索效率)
+		然后把元素与桶中的每一个元素相比较，先通过hashCode来比较，
+		如果hashCode不相等，直接返回false，认为元素不相等；
+		如果hashCode相同再用equals来比较两个元素是否相等。
+		即，equals相等，hashCode一定相等；hashCode相等，因为会有hash冲突，所以equals并不一定相
+		这里说的是都重写，或都不重写的情况，这就是为什么重写equals()必须要重写hashCode()的原因：为了保证两者一致性，防止依赖这两个方法的哈希集合出错
+
+		HashMap插入元素时，判断key是否是同一个key的时候，使用大概如下判断逻辑：
+
+		```java
+		if (p.hash == hash && ((k = p.key) == key || (key != null && key.equals(k)))){
+		     e = p; //认为是同一个K，替换
+		}   
+		
+		/*
+		hash == hash &&
+			是为了提高效率，hash不同，equals必定不同，hash返回false直接短路了，不必再比价equals了，提高效率
+		p.key == key || key.equals(k)
+			是因为无论重不重写equals，==为true，必定为同一个对象，equals必定相同。==为true直接短路了，提高效率
+			==为false再比较equals是因为，重写equals后，即使不是同一个对象，但它逻辑值相等，我们也认为它们是同一个对象
+		*/
+		```
+
+	- hashCode()与equals()两者的关系：equals相同的对象，返回的hashCode必定相同（都重写或都不重写的情况）
+
+		- 同一个对象多次调用hashCode()方法应该返回相同的值
+
+		- equals相等，则hashCode一定相等
+
+		- equals不相等，则hashCode有可能相等，即hashCode相等，则equals不一定相等
+
+		- hashCode不相等，则equals一定不相等
+
+		- 不同对象的hashCode可能相等是因为会有哈希冲突，因为输入数据量太大，但hashCode返回值是一个int类型，固定32位，这意味这哈希值是一个有限集合
+
+			<img src="https://oss.mingever.com/note/java/HashCodeAndEquals.png" style="zoom: 67%;" />
+
+#### 重写
+
+- 重写equals()必须要重写hashCode() 
+
+- equals()底层默认是用 == 实现的；hashcode()默认是使用内存地址(其实并不是内存)进行散列的
+	euqals()一般只需要进行逻辑值的判断.如果逻辑值相同，就认为它们是同一个对象，此时需要重写hashCode()，让它们返回同一个hashCode值
+
+- 重写equals()必须要重写hashCode()是针对基于哈希实现的容器来说的，比如HashMap、HashSet、HashTable、ConcurrentHashMap这些容器，防止这些依赖hashcode的容器出现错误。如果没有使用这些散列存储结构，并不会用到hashCode()，所以重写equals()也并不需要重写hashCode()
+
+- 所以不要把自定义对象做hashmap的key，同时相同属性值的不同对象视为同一个key的时候需要重写
+
+- 例子：
+
+	```java
+	if (p.hash == hash && ((k = p.key) == key || (key != null && key.equals(k)))){
+	     e = p; //认为是同一个K，替换
+	}   
+	//HashMap的Key值，不允许重复。
+	```
+
+	如果有两个不同的对象，它们的逻辑值相同，先把第一个对象作为K值存储到HashMap中，然后再存第二个
+
+	- 重写equals但没有重写hashCode：它们的equals相同，但hash不同，hash散列后找到哈希桶的位置
+
+		- 可能与第一个元素是同一索引位置：hash不同，直接为false，认为不是相同元素，插到链表尾，造成重复的K值
+		- 可能是不同索引位置：没有相同的元素，直接插入，但第一个元素已经存在其他哈希桶中了，造成了重复的K值
+
+	- 重写了hashCode但没有重写equals：它们的hash相同，但equals不同。
+
+		hash相同，第二个元素直接散列到了第一个元素的哈希桶中，与第一个元素相比较。
+		hash相同返回true
+		然后比较(k = p.key) == key，因为不是同一个元素，所以未false
+		然后比较equals为false
+		所以此if为false，认为不是相同元素，插到链表尾，造成重复的K值
+
+### 包装类
+
+将java的基本数据类型与其提供的一些常用的类型操作方法进行了封装，封装成包装类
+
+==包装类是final不可改变的==，在构建了包装对象之后，不允许改变包装在其中的值
+
+| 基本类型 | 包装类              | 父类             |
+| -------- | ------------------- | ---------------- |
+| int      | java.lang.Integer   | java.lang.Number |
+| long     | java.lang.Long      | java.lang.Number |
+| double   | java.lang.Double    | java.lang.Number |
+| short    | java.lang.Short     | java.lang.Number |
+| float    | java.lang.Float     | java.lang.Number |
+| byte     | java.lang.Byte      | java.lang.Number |
+| char     | java.lang.Character | java.lang.Object |
+| boolean  | java.lang.Boolean   | java.lang.Object |
+
+#### Number类
+
+抽象类，其子类必须提供将其表示的数值转换为byte,double,float,int,long和short的方法
+
+- doubleValue()：以double形式返回指定的数值
+
+- intValue()：以int形式返回指定的数值
+
+- floatValue()：以float形式返回指定的数值
+
+	```java
+	Number a = 1.0;
+	Number b = 123;
+	double a1 = a.doubleValue;
+	int b1 = b.intValue;
+	```
+
+#### parseXXX(String str)
+
+包装类提供了一个==静态方法== parseXXX(String str)方法，==将给定的字符串转换为对应的基本类型，但前提是该字符串必须正确的描述基本类型可以保存的值==
+
+```java
+//通过Integer类将字符串转换为int,但要注意所转的字符串必须是数值字符串
+String str = "123";
+int intValue = Integer.parseInt(str);
+```
+
+#### 自动装箱和拆箱
+
+编译器在编译期预处理的工作，在用基本类型和包装类型的过程中不需要程序员处理，编译器会自动进行转换
+
+- ==装箱是指将基本类型转换为包装类型的过程==
+
+	```java
+	Integer i =1;//自动装箱
+	```
+
+- ==反之，拆箱是将包装类转换为基本类型的过程==
+
+	```java
+	Integer i =1;//自动装箱
+	int a = i//自动拆箱
+	```
+
+#### 包装类常量池
+
+- 从-128~127的数全部被自动加入到了常量池里面，意味着这个段的数使用的常量值的地址都是一样的
+
+- 除了两个包装类Long和Double 没有实现这个缓存技术，其它的包装类均实现了它
+
+- 例1
+
+	```java
+	Integer i1 = 40;
+	Integer i2 = 40;
+	Double i3 = 40.0；
+	Double i4 = 40.0；
+	
+	System.out.println("i1=i2" + (i1 == i2)); //true   没有自动拆箱，所以比较的不是数值，是地址
+	System.out.println("i3=i4" + (i3 == i4)); //false  Double没有使用常量池
+	```
+
+- 例2
+
+	```java
+	Integer i1 = 40;
+	Integer i2 = 40;
+	Integer i3 = 0;
+	Integer i4 = new Integer(40);
+	Integer i5 = new Integer(40);
+	Integer i6 = new Integer(0);
+	
+	System.out.println("i1=i2" + (i1 == i2));          //i1=i2      true      因为是同一个地址
+	System.out.println("i1=i2+i3" + (i1 == i2 + i3));  //i1=i2+i3   true      是因为运算符自动拆箱
+	System.out.println("i1=i4" + (i1 == i4));          //i1=i4      false     是因为内存地址不同
+	System.out.println("i4=i5" + (i4 == i5));          //i4=i5      false     是因为内存地址不同
+	System.out.println("i4=i5+i6" + (i4 == i5 + i6));  //i4=i5+i6   true      是因为运算符自动拆箱
+	System.out.println("40=i5+i6" + (40 == i5 + i6));  //40=i5+i6   true      是因为运算符自动拆箱
+	```
+
+	![](https://oss.mingever.com/note/java/WrapperConstantPool.png)
+
+	> - 当出现运算符的时候，Integer不可能直接用来运算，所以会进行一次拆箱成为基本类型进行比较
+	> - == 运算符，既可以比较普通基本类型，也可以比较内存地址
+	> - 如果超出了-128~127这个范围，所有的都将成为新的对象
+	> - equals方法比较的时候不会处理数据之间的转型，比如Double类型和Integer类型
+
+
+
+### 日期类
+
+#### Date类
+
+其中许多方法已经过时
+
+- Date() 构造方法，生成一个对象用当前时间初始化（精确到毫秒）
+- Date(ong date)构造方法，生成Date对象并初始化此对象
+- 方法：
+	- boolean after(Date when)
+	- boolean before(Date when)
+
+#### Calender类
+
+- 抽象类，时系统时间的抽象表示
+
+- getInstance类方法，以获得此类型的一个通用类型。Calender的getInstance方法返回了一个Calender对象，由当前日历和时间初始化
+
+- 是一个抽象类，只有创建了其对应的子类才能使用其中的方法
+
+	```java
+	//演示如何获取calender及claender和date之间的转换
+	Calender cal = Calender.getInstance(); //获取calender实例对象
+	Date d = cal.getTime(); //从cal中获取一个date对象
+	Date d1 = new Date(); // 将date转换为calender,因为calender并没有提供对应的构造方法
+	cal.setTime();
+	```
+
+- 修改访问时间的方法
+
+	```java
+	add(int field);
+	get(int field);
+	set(int field,int var);
+	set(int year,int month,int date);
+	```
+
+#### 日期的输入与输出
+
+- 输入即将字符串转换为Date对象，输出即将Date转换为有格式的字符串
+
+- 通过抽象类DateFormat的实现类SimpleDateFormat和其parse(String)和format(Date)方法
+
+- String到Date和Date到String的演示，DateFormate并没有提供对Calender的处理，所有要对Calender进行处理，必须借助与Date
+
+	```java
+	Date dNow = new Date( );
+	SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+	System.out.println("当前时间为: " + ft.format(dNow));
+	```
+
+
+
+## 集合
+
+### 概述
+
+又称为容器，他是一个对象，能将具有相同性质的多个元素汇聚成一个整体，一个集合代表一组对象，这些对象作为集合的元素
+
+==集合只能承载对象，不能承载基本数据类型，但会装箱操作，把其转化为对象==
+
+==java集合中保存的元素实质是对象的引用的拷贝，而非对象本身==
+
+Collection是一个接口，两个子接口List和set
+
+map接口，有两个实现类HashMap和Hashtable
+
+<img src="https://oss.mingever.com/note/java/CollectionOverView.JPG" style="zoom: 15%;" />
+
+- Collection
+	- add();
+	- size();
+	- remove();
+	- clear();
+	- isEmpty();
+	- iterator();
+- List
+	- add(int     index,Object o);
+	- get(int index);
+	- set(int index,Object o);
+- Map
+	- put(key,value);
+
+### Collection
+
+Collection接口是set接口和List接口的父接口，提供了大量的，通用的集合操作方法
+
+- `boolean add(E e)`：向集合中添加新元素，成功返回true
+- `boolean contains(Object o)`：判断给定的元素是否被包含在集合中
+- `int size()`：返回当前集合中的元素总数
+- `void clear()`：清空当前集合
+- `boolean remove(Object o)`：删除集合中的指定元素
+- `boolean isEmpty()`：判断当前集合是否为空
+- `Iterator iterator()`：返回一个Iterator对象，用于遍历集合中的所有元素
+- `addAll()`：需要传入一个集合，并将该集合中的所有元素添加到当前集合中去
+- `containsAll()`：用于判断当前集合是否包含给定集合中的所有元素，若包含则返回true
+
+### Iterator
+
+集合里最重要的东西。Iterator主要用于遍历Collection集合中的元素，Iterator对象也称为迭代器。Iterator必须依附于Collection对象。
+
+1. hasNext()
+
+	- boolean hasNext()：如果被迭代的集合元素还没有被遍历，则返回true
+	- Object next()：返回集合中的下一个元素
+
+	```java
+	Collection book = new HashSet();
+	book.add("123");
+	book.add("456");
+	book.add("789");
+	Itreator it = book.iterator(); //获取book集合对应的迭代器
+	while(it.hasNext()){
+	    String book = (String)it.next();//next方法返回的是Object类型，要强制类型转化
+	    System.out.println(book);
+	}
+	
+	//即
+	while(it.hasNext()){     //查询容器中时候还存在下一个元素，如果存在返回true
+	    it.next();           //在一次循环中，只能用一次next()，重复调用会返回在下面的元素
+	}
+	```
+
+2. remove()
+
+	- `void remove()`：删除集合里上一次next方法返回的集合元素
+
+	- 使用迭代器遍历集合时，不能通过集合的remove方法删除集合元素，可以通过iterator自身提供的remove()方法来删除通过next()迭代出的元素
+
+	- itreator的remove()方法是在原集合中删除元素，但只能删除next()方法迭代过的元素，删除后只能再次调用next()方法来迭代元素才能删除下一个元素
+		==即，用iterartor迭代访问collection集合元素时，只能通过iterator的remove()方法删除上一次next()方法返回的集合元素，而不能使用Collection的remove()==
+
+	- Iterator采用的是快速失败机制fail-fast机制，一旦在迭代过程中检测到集合已经被修改，则立即引发异常
+
+3. 增强for循环
+
+	==只用于遍历集合或数组==
+
+	```java
+	for(元素类型 e : 集合或数组){
+	    循环体
+	}
+	```
+
+### Set(无序唯一)
+
+是一个==不能包含重复元素的接口==，是Collection的子接口，只包含从Collection继承过来的方法，并==增加了对add()方法的限制，不允许有重复元素==，==如果加入了重复元素，add()将返回false，元素并不会被插入==
+
+1. set集合==没有下标==的概念，当获取set集合中的某个元素时，只能通过遍历集合的方式进行==equals()比较==来实现
+2. 重写了equals()，允许对set实例进行内容上的比较，判断两个对象相等只要通过equals()方法比较返回true即可
+3. set接口==没有增加新的方法==，只包含从collection接口继承过来的方法，包括其中的5个基本操作方法
+4. 与Map关系密切
+5. 实现类：
+	- `HashSet`：将其元素存放在一个==哈希表==中，具有最好的性能实现，但不保证迭代的顺序，（阉割版的map）
+	- `TreeSet`：将元素存放在一个==红黑树==中，按元素的值顺序排列，因此其==具有排序功能，会将里面的元素默认排序==
+	- `LinkedHashSet`：底层数据结构是==链表==和==哈希表==
+
+### List(有序可重复)
+
+==List是有序的Collection，允许有相同的元素，此接口能精确的控制每个元素的插入位置，能使用索引（元素在List中的位置，类似于数组的下标）来访问List中的元素==
+
+1. 增加了以下操作
+
+	- ==按位置访问==：根据元素在序列中的位置索引访问元素
+	- ==查找==：在序列中找到指定的对象，并返回其索引位置
+	- ==迭代==：扩展了Iterator接口，以利用序列的有序性
+	- List子集合：在序列上执行任意范围的操作
+
+2. 除了继承Collection接口的方法外，增加了以下方法
+
+	- `void add(int index,Object element)`：将元素element插入到List集合的index处
+	- `boolean addAll(int index,Collection c)`：将集合C所包含的所有元素都插入到List集合的index处
+	- `Object get(int index)`：返回集合index索引出的元素
+	- `int indexOf(Object o)`：换回集合o在list集合中第一次出现的位置索引
+	- `Object remove(int index)`：删除并返回index索引处的元素，==索引以0开始==
+	- `Object set(int index,Object element)`：将index处的元素替换成element对象，并返回新元素，但指定的索引必须是有效索引，不能超出，即set方法不会改变List集合的长度
+
+3. List判断==两个对象相等==只要通过`equals()`方法比较返回true即可
+
+4. treator接口
+
+	List额外增加了`ListIterator()`方法，该方法返回一个`ListIterator`对象，ListIterator接口继承了Itreator接口，提供了专门操作List的方法，增加了如下方法
+
+	- `boolean hasPrevious()`：返回该迭代器关联的集合是否还有上一个元素
+	- `Object previous()`：返回迭代器的上一个元素
+	- `void add()`：在指定位置插入一个元素
+
+	可以看出，ListIterator增加了向前迭代的功能，而且可以通过add()方法向集合中增加元素
+
+5. List接口的实现类有LinkedLise，ArrayList，Vector，Stack
+
+	- `ArrayList`实现了可变大小的数组，每个ArrayList实例都有一个容量，用于存储元素的数组的大小，这个容量可以随着不断添加新元素而自动增加（动态数组）
+	- `LinkedList`还实现了Deque方法，因此他可以当作双端队列来使用，当然也可以当成栈来使用
+	- `Vector`是线程安全的，效率比较低，被ArrayList所取代了
+
+### Map(键值对)
+
+用于保存具有映射关系的数据，Map集合里有两组值key和value，key和value都可以是任何引用类型的数据，key不允许重复。key和value之间存在单向一一对应关系
+
+Map中存放的是key-value对。Map和Set之间关系非常密切，如果把Map里的key放在一起来看，他们就组成了一个set集合（key没有顺序且不能重复）
+
+==Map重写了toString方法==，调用Map对象的toString方法总会返回如下格式的字符串
+{key1=value1,key2=value2 ……..}
+
+- 实现类HashTable
+
+	实现了一个key-value映射的哈希表，不允许key或valus为空，是线程安全的，效率较慢
+
+	添加数据使用`put(key,value)`，取出数据用`get(key)`
+
+	```java
+	Hashtable numbers = new Hashtable();
+	numbers.put("one",new Integer(1)); //"one"为字符串键值，1为int类型要先装箱变为Integer对象，才能插入集合
+	numbers.put("one",new Integer(2));
+	numbers.put("one",new Integer(3));
+	
+	Integer inter = (Integer).get("two"); //集合里的对象会变为Object类型，必须强制转换为Integer对象（所有要使用泛型）
+	System.out.println(inter)
+	```
+
+- 实现类HashMap
+
+	==最多允许一条key为空值，允许多条value的值为空==，不是线程安全的，效率较高
+
+- 实现类TreeMap
+
+	==是有序的==，Hashtable和HashMap是无序的
+
+### 泛型
+
+1. 将一个对象放入集合中，集合不会记住此对象的类型，当再次从集合中取出时，该对象的编译时类型变为了==Object类型==，但其运行时类型仍为其本身类型，==当取出集合元素时，需要人为的强制类型转换到具体的目标类型==
+
+2. 泛型即“==参数化类型==”，将类型由原来的具体的类型参数化。也就是说，==泛型就是将所操作的数据类型作为参数的一种语法==
+
+3. 作用：
+
+	- ==只在编译阶段有效，将代码安全性检查提前到编译期，泛型不会进入到运行时阶段==
+
+	- ==泛型能省去强制类型转换，由于编译器知道了具体类型，因此编译期间会自动强制类型转换==
+
+		```java
+		List<String> list = new ArryList<String>(); //直接限定了List集合中只能含有String类型的元素
+		list.add("abc");
+		list.add("def");
+		for(int I = 0;i<list.size();i++){
+		    String name = list.get(i); //无需进行强制类型转换
+		    System.out.println(name);
+		}
+		```
+
+4. ==接口，类和方法都可以使用泛型去定义，泛型接口，泛型类和泛型方法==
+
+	泛型类型在逻辑上看成是多个不同类型，实际上都是相同的基本类型
+
+5. 类型通配符
+
+	一般使用 `?` 代替具体的类型实参
+
+### HashMap
+
+
+
+## 异常
+
+### 概述
+
+1. ==异常机制可以使程序中的异常处理代码和正常业务代码分离，使程序逻辑清晰，增加程序容错性==
+
+2. 程序错误
+
+	语法错误，运行时错误，逻辑错误。
+	运行时错误即程序运行时出现的没有想到的错误，==空指针异常==，==程序越界==，==除数为0==等。
+	==java异常处理机制主要是指处理运行时错误，即异常就是运行时错误。==
+
+3. 产生异常的原因
+
+	- java内部发生错误，java虚拟机产生异常
+	- 编写程序时由于错误产生的异常，如空指针异常，数组越界异常
+	- 通过throw语句生成的异常。称为检查异常，用来告知方法的调试者相关信息
+
+4. java通过==面向对象的方法处理异常==
+
+	- ==抛出==：生成异常对象并把他交给运行时系统的过程称为抛出
+	- ==捕获==：运行时系统在方法的调用栈中查找，直到找到能处理该异常的对象的过程称为捕获
+
+5. java的异常机制主要依赖与==try，catch，finally，hrow，throws==这五个关键字
+
+### 异常处理
+
+#### 异常类
+
+`Throwable`类，其派生的两个子类`Exception`，`Error`。
+==Exception可以处理，error不可以处理==
+
+1. 所有的异常都继承自Throwable
+	Error表示错误，Exception表示异常
+	异常是可以被处理的而错误是没法处理的
+
+2. 异常类Exception又分为运行时异常（又叫非检查异常）和非运行时异常（又叫检查异常）
+
+	- Error是Java虚拟机中出现的不可恢复的错误
+	- Exception是类发生的异常
+	- 检查异常是在==编译期==发生
+	- 非检查异常（RuntimeException）是在==程序运行时==发生
+
+3. 非检查异常
+
+	==即运行时异常，继承于RuntimeException，在程序运行时发生的；编译器允许程序不对他们做出处理，也可以选择捕获处理==
+
+	- NullPointerException：空指针异常，对象引用参考值为null
+	- ArrayInsexOutOfBoundsException：数组越界异常，数组索引超出范围
+	- ClassCastException：类对象强制转换造成不当类对象所产生的异常
+	- NumberFormatException：字符串转换为数值所产生的异常
+	- IndexOutOfBoundsException：索引超出范围所产生的异常
+
+4. 检查异常
+
+	==即非运行时异常，RuntimeException以外的异常，在编译期发生；编译器要求程序必须捕获或者声明抛出这种异常，是必须处理的异常==
+
+	- IOException：IO流异常
+	- ClassNotFoundException：找不到类或接口所产生的异常
+	- IllegalAccessEcception：类定义不明确产生的异常
+
+<img src="https://oss.mingever.com/note/java/ExceptionSort.PNG" style="zoom: 50%;" />
+
+#### 异常处理机制
+
+主要包括捕获异常，程序流程的跳转和异常处理语块的定义
+
+java异常处理是通过5个关键字来实现的：try、catch、throws、throw、finally
+
+- 积极的处理：try/catch 捕获异常
+
+- 消极的处理：throws、throw抛出异常
+
+#### Exception常用API
+
+- `printStackTrace`：Throwable定义了一个可以输出错误信息，跟踪异常事件发生时执行的堆栈内容
+- `getMessage`：定义了一个方法可以得到有关异常的信息
+- getCause：检索导致异常的原因
+
+#### 自定义异常类
+
+必须从一个现有的异常类型（最终继承自Throwable）类继承
+
+自定义异常时，自定义异常类必须是Throwable类的直接或间接子类，如Exception
+
+```java
+class UserExisExceptin extends Exception{}
+
+public void regist(String user){
+    if(user.equals("123")){
+        throw new UserExisException();
+    }catch(UserExisException e){
+        e.printStackTrace();
+    }
+}
+```
+
+#### 异常处理规则
+
+- 不要过度使用异常
+- 不要使用过于庞大的try块
+- 避免使用catch all语句
+- 不要忽略捕获到的异常
+
+### try/catch
+
+==异常的处理目的并不是为了避免发生异常，而是在异常发生时避免程序的异常终止，设法将损失降到最小==
+
+try语句块来启动java的异常处理机制，==凡是可能抛出异常的语句==，包括==throw语句==和==可以抛出异常的方法的调用语句throws==，==都因该包含在这个try语句块中，然后再catch语句块中对异常进行处理==
+
+1. try/catch语句块
+
+	```java
+	try{
+	    可能产生异常的代码段
+	}catch(异常类型){
+	    对异常进行处理
+	}
+	```
+
+	- 在java里异常对象是依靠try/catch语句来捕获处理的
+
+	- 用try来执行一段可能发生异常的程序，如果发生异常，系统会抛出一个异常，这时可以通过异常的类型用catch来捕捉，执行catch里的语句
+
+	- 每个try语句块可以伴随一个或多个catch语句，用于处理可能产生的不同类型的异常，==但有多个catch时只会捕获到第一个异常，try中异常代码下面的代码不会执行且catch捕获的异常类型由上到下应是子类在前父类在后。==
+
+	- `e.printStackTrace()`
+
+		打印异常，默认使用了System.err输出流将异常堆栈输出到控制台或日志，方便查找发生异常发生的位置及原因，但不建议使用
+
+2. finally语句块
+
+	- ==是必须强制执行的，为异常处理提供一个统一的出口，不管有没有发生异常都会执行==。除了exit(0);之外都会运行
+	- 用来控制从try/catch语句转移到另一部分之前的一些必要的善后工作，通常可以进行资源的释放工作，如关闭打开文件，删除临时文件
+	- finally语句块紧接着tyr/catch结构中的最后一个catch语句块
+	- try/catch/finally语句块允许嵌套，嵌套在外层的finally语句块中
+	- ==可以与break，continu，return一起使用，但要先执行finally之后才能最终离开try语句块==
+
+3. try/catch捕获异常后的流程
+
+	==用try/catch之后，如果异常发生，程序并不会终止==
+
+	try{}里的代码发生异常后，会抛出异常对象，然后根据异常类型会被catch捕捉到，然后执行catch里的异常处理代码，然后必定执行finally{}里的代码；try{}里发生异常代码的下面的代码不会被执行，而是跳出try{}，继续执行try/catch后面的程序；即有多个catch时只能捕捉到try里的第一个异常，try里其他的代码没有机会执行
+
+	```java
+	public class Text{
+	    public static void main(String[] args){
+	        try{
+	            int[] a = {1};
+	            int b = 8/0;  //会发生除0异常
+	            a[10] = 1;    //会发生数组越界异常，但此代码没有执行
+	        }catch(AirthmeticException e){
+	            System.out.println("除0异常");
+	            e.printStackTrace(); //打印异常
+	        }catch(ArrayIndexOutOfBoundsException e){
+	            System.out.println("数组越界"+e); 
+	        }finally{
+	            System.out.println("finally运行"); //finally里的代码必定执行
+	        }
+	        System.out.println("继续运行") //程序不会终止，继续运行
+	    }
+	}
+	
+	/*
+	除0异常
+	java.lang.ArithmeticException: /by Zero
+		at Text.main(Text.java:5)
+	finally运行
+	继续运行
+	*/
+	```
+
+### Throws
+
+1. ==定义在方法函数头，对方法中可能出现的异常进行消极处理，不直接在这个方法中处理这些异常==，而是交给方法调用处进行处理。
+2. 使用了throws的方法，调用时必须处理声明的异常，要么使用try-catch，要么继续使用throws声明
+3. 语法：`方法名() throws 异常列表`
+4. ==throws子句中可以指明多个异常，说明该方法将不对这些异常进行处理，而是声明抛弃他们==
+5. 继承时，父类某个方法上throws抛出某些异常，在子类中重写该方法时：
+	- 可以
+		- 不处理异常，重写时不设定throws
+		- 可仅throws父类中声明的部分异常
+		- 可throws父类方法中抛出异常的子类异常
+	- 不可以
+		- ==throws额外的异常==
+		- ==throws父类方法中所抛出异常的父类异常==
+
+```java
+public static void StringToDate(String str) throws ParseException{
+    //方法代码
+}
+
+public static void main(String[] args){
+    //调用StringToDate方法
+    try{
+        StringToDate("2023-3-14");
+    }catch(ParseException e){
+        e.printStackTrace();
+    }
+}
+```
+
+
+
+### Throw
+
+1. ==定义在函数体，也是对异常进行消极处理，在程序中自行抛出异常，抛出的不是一个类，而是一个对象且只能一个对象。即，throw关键字用于显式抛出异常,抛出的时候是抛出的是一个异常类的实例化对象==
+
+2. ==在throw所new的异常方法中（非运行时异常）一般需要try/catch捕获处理，或在方法声明处throws异常类型，==交给方法调用处进行处理。
+
+3. 一般步骤
+
+	- 指定或定义一个合适的异常情况类
+
+	- 产生这个类的一个对象
+
+	- 抛出它
+
+		```java
+		NUllPoinerException e = new NUllPoinerException();
+		throw e;
+		```
+
+4. throws与throw区别
+
+	- throws主要是声明这个方法会抛出这种类型的异常，使他的调用者知道要抛出这个异常。是具体向外抛出的动作，所以他是抛出一个异常实例。
+	- throws出现在方法头
+		throw出现在方法体
+	- ==trows表示出现异常的一种可能性，并不一定发生这些异常；执行throw则是一定抛出了异常。==
+	- throws通常不用显示地捕获异常，可由系统自动将所有捕获的异常信息抛给上级方法
+		throw则需要用户自己捕获相关的异常，而后再对其进行相关包装，最后将包装后的异常信息抛出。
+	- 两者都是消极处理异常的方式，只是抛出或者可能抛出异常，但不会由函数去处理异常，==真正的处理异常由函数的上层调用处理（或者throw后，本方法try/catch处理）==。==即只管抛出异常，而异常的处理则由上层的try/catch来捕获或者处理。==异常一层一层往上抛，直到找到捕获异常的逻辑，交给主线程来处理。==如果到主方法（main方法)时还没有捕获，则终止程序运行退出进程。==
+	- ==非运行异常throw时 一定需要try/catch处理，或者在方法头上加上throws==，以待捕获或继续抛出，是因为运行时异常一旦发生，程序会停止。
+		==运行时异常不用try-catch或者在方法声明处加throws子句==，写上也行，但是==不建议进行catch处理==。
+
+	------
+
+	java异常一般分为Checked异常和Runtime异常，所有RuntimeException类及其子类的实例被称为Runtime异常，不属于该范畴的异常则被称为CheckedException。
+
+	Java认为Checked异常都是可以被处理的异常，所以Java程序必须显示处理Checked异常。如果程序没有处理Checked异常，该程序在编译时就会发生错误无法编译。
+
+	而RuntimeException异常如果没有显试的捕获处理则由系统自动检测并将它们交给缺省的异常处理程序。
+
+	JSONException应该是RuntimeException的子类，可以不用显式的对它try...catch或者throws.如果没有对该异常的处理会交给jvm处理。
+
+	而你自己写的异常肯定是属于Checked异常，被认为是可以避免的异常，必须try...catch或者显式的抛出throws不然编译报错。如果你自定义的异常想像throw new JSONException这样处理，则你自定义的异常需要继承RuntimeException即可
 
